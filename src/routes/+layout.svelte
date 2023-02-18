@@ -1,10 +1,12 @@
 <script>
 	import '../app.css';
+  	import NavBar from '../components/NavBar.svelte';
 </script>
 
-<div class="app">
+<div class="app font-mono flex">
 
-	<main>
+	<NavBar/>
+	<main class= "w-2/3">
 		<slot />
 	</main>
 
