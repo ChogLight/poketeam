@@ -1,6 +1,6 @@
 <script>
-	import '../app.css';
   	import NavBar from '../components/NavBar.svelte';
+	import '../app.css'
 </script>
 
 <div class="app font-mono flex">
