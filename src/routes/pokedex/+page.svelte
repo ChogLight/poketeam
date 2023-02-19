@@ -4,9 +4,8 @@
     import Pokemon from "../../components/Pokemon.svelte"
     let counter = 0
     let url = `https://pokeapi.co/api/v2/pokemon?limit=9&offset=${counter}`
-    let result
     let promise
-    let pokemon = []
+
     
     onMount(async () => {
       const response = await fetch(url)
@@ -15,10 +14,10 @@
     })
 </script>
 
-<div class="container mt-20 mx-auto">
+<div class="container">
 
 
-    <div class="md:grid grid-cols-3 gap-4 mt-20">
+    <div class="md:grid grid-cols-3 gap-4 mt-10">
       {#await promise}
         <div>
           <h1>...waiting for info</h1>

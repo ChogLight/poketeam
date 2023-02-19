@@ -4,9 +4,9 @@
 </script>
 
 <div class="app font-mono flex">
-
+	
 	<NavBar/>
-	<main class= "w-2/3">
+	<main class= "">
 		<slot />
 	</main>
 
