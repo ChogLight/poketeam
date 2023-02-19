@@ -1,6 +1,11 @@
 <script>
 // @ts-nocheck
     import img from '../lib/images/pokeball.svg'
+    import home from '../lib/images/house-solid.svg'
+    import hammer from '../lib/images/hammer-solid.svg'
+    import phone from '../lib/images/mobile-retro-solid.svg'
+    import pen from '../lib/images/pen-nib-solid.svg'
+    import log from '../lib/images/right-to-bracket-solid.svg'
     let navBarSize = "w-1/12"
     const changeIconHoverIn = () => {
         navBarSize = "w-1/6"
@@ -10,7 +15,6 @@
     }
 </script>
 
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} 
     class = "flex flex-col {navBarSize} bg-red-500 h-screen items-center text-white duration-300">
  
@@ -23,9 +27,9 @@
             <a class="basis-1/3 hover:text-3xl duration-300" href="/pokedex">PokeDex</a>
             <a class="basis-1/3 hover:text-3xl duration-300" href="/teambuilder">Team builder</a>
         {:else if navBarSize === "w-1/12"}
-            <a class="basis-1/3" href="/"><i class="fa-solid fa-house"></i></a>
-            <a class="basis-1/3" href="/pokedex"><i class="fa-sharp fa-solid fa-mobile-retro"></i></a>
-            <a class="basis-1/3" href="/teambuilder"><i class="fa-solid fa-hammer"></i></a>
+            <a class="basis-1/3" href="/"><img height="20px" width="20px" src={home} alt="home"></a>
+            <a class="basis-1/3" href="/pokedex"><img height="15px" width="15px" src={phone} alt="dex"></a>
+            <a class="basis-1/3" href="/teambuilder"><img height="20px" width="20px" src={hammer} alt="build"></a>
         {/if}
 
     </nav>
@@ -35,8 +39,9 @@
             <a class="hover:text-yellow-400 duration-100" href="/login">Log in</a>
             <a class = "hover:text-yellow-400 duration-100" href="/signin">Sign in</a>
         {:else if navBarSize == "w-1/12"}
-            <i class="fa-solid fa-right-to-bracket"></i>
-            <i class="fa-solid fa-pen-nib"></i>
+
+            <img height="20px" width="20px" src={log} alt="log">
+            <img height="20px" width="20px" src={pen} alt="pen">
         {/if}
         
     </div>
