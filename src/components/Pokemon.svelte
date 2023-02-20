@@ -1,5 +1,6 @@
 <script>
 // @ts-nocheck
+    import Pokeball from "../lib/images/Pokeball.svelte";
     export let url
     let pokemon
     let promise
@@ -26,7 +27,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 
 {#await promise}
-    <h1>...loading data</h1>
+    <Pokeball width = 50 heigth = 50 animation = "animate-spin"/>
 {:then pokemon} 
 
     <div class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
