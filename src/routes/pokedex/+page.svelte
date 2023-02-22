@@ -6,23 +6,26 @@
     import Pokeball from "$lib/images/Pokeball.svelte";
     let counter = 0
     let pageCount = 9
-    let currentPage = 0
+    let currentPage = 1
     let url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`
     let promise
     let innerPromise
     let pokeArray = []
-    let pokemonNumber
+    let pokemonNumber = 1279
+    let numberOfPages
 
     $:{
       url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`;
+      numberOfPages = Math.round(pokemonNumber/pageCount) >= pokemonNumber/pageCount? 
+        Math.round(pokemonNumber/pageCount):
+        Math.round(pokemonNumber/pageCount);
       pokeArray = [];
-      getPokemon()
+      getPokemon();
     }
     const getPokemon = async () => {
       const response = await fetch(url)
       promise = response.json()
       promise.then(async(pokemonList) => {
-      pokemonNumber = pokemonList.count
       pokemonList.results.map(async (pokemon)=> {
         const response = await fetch(pokemon.url)
         innerPromise = response.json()
@@ -32,15 +35,15 @@
         })
       })
     })
-
     }
-    
+
+    console.log(pokemonNumber)
     
 </script>
 
 
 <div class="flex flex-col m-auto overflow-auto">
-  <Paginator pageSize = {pokemonNumber} bind:counter bind:pageCount/>
+  <Paginator bind:counter bind:pageCount bind:currentPage bind:numberOfPages/>
       {#await innerPromise}
         <div class="mx-auto content-center">
           <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
