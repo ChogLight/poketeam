@@ -33,7 +33,6 @@
         innerPromise = response.json()
         innerPromise.then((poke) => {
           pokeArray.push(poke)
-          console.log(poke)
           pokeArray.sort((a,b) => a.id - b.id)
         })
       })
