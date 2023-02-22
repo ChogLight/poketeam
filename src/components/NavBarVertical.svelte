@@ -7,7 +7,7 @@
     export let animation
 </script>
 
-<div class = "flex flex-col {navBarSize} bg-red-500 items-center text-white h-screen duration-300">
+<div class = "flex flex-col {navBarSize} bg-red-500 items-center text-white h-full duration-300">
     <div class = "basis-1/3 p-6">
         <a href="/"><Pokeball width = {width} height = {height} animation = {animation}/></a>
     </div>

@@ -1,9 +1,6 @@
 <script>
 // @ts-nocheck
-    import Pokeball from "../lib/images/Pokeball.svelte";
-    export let url
-    let pokemon
-    let promise
+    export let pokemon
     const getType = (types) => {
 
         if (types[1]) {
@@ -13,23 +10,8 @@
             return types[0].type.name
         }
     }
-    const getPokemon = async () => {
-        const res = await fetch(url)
-        const result = await res.json()
-        return result
-    }
-
-    promise = getPokemon()
 
 </script>
-
-
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-
-{#await promise}
-    <Pokeball width = 50 heigth = 50 animation = "animate-spin"/>
-{:then pokemon} 
-
     <div class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
         
         <div class="w-1/3 font-bold text-red-600 text-xs mr-5">
@@ -37,7 +19,7 @@
                 N.°{pokemon.id}
             </p>
             <img class="m-2" width = "184" height="184"
-                src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${name}_img`}/>
+                src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${pokemon.name}_img`}/>
         </div>
         <div class="w-2/3">
 
@@ -73,4 +55,3 @@
             
         </div>
     </div>
-{/await}

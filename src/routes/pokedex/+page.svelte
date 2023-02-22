@@ -2,31 +2,62 @@
 // @ts-nocheck
     import { onMount } from "svelte"
     import Pokemon from "../../components/Pokemon.svelte"
+    import Paginator from "../../components/Paginator.svelte";
+    import Pokeball from "$lib/images/Pokeball.svelte";
     let counter = 0
-    let url = `https://pokeapi.co/api/v2/pokemon?limit=9&offset=${counter}`
+    let pageCount = 9
+    let currentPage = 0
+    let url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`
     let promise
-    onMount(async () => {
+    let innerPromise
+    let pokeArray = []
+    let pokemonNumber
+
+    $:{
+      url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`;
+      pokemonNumber = pokemonNumber
+      pokeArray = [];
+      getPokemon()
+    }
+    const getPokemon = async () => {
       const response = await fetch(url)
       promise = response.json()
-
+      promise.then(async(pokemonList) => {
+      pokemonNumber = pokemonList.count
+      pokemonList.results.map(async (pokemon)=> {
+        const response = await fetch(pokemon.url)
+        innerPromise = response.json()
+        innerPromise.then((poke) => {
+          pokeArray.push(poke)
+          pokeArray.sort((a,b) => a.id - b.id)
+        })
+      })
     })
+
+    }
+    
+    
 </script>
 
-<div class="container m-auto">
-      {#await promise}
-        <h1>
-          Loading
-        </h1>
+
+<div class="flex flex-col m-auto overflow-auto">
+  <Paginator pageSize = {pokemonNumber} bind:counter bind:pageCount/>
+      {#await innerPromise}
+        <div class="mx-auto content-center">
+          <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
+        </div>
       {:then results}
         <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
           {#if results !== undefined}
-            {#each results.results as pokemon }
-            <Pokemon url = {pokemon.url}/>
+            {#each pokeArray as pokemon}
+            <Pokemon pokemon = {pokemon}/>
             {/each}
           {/if}
         </div>
       {:catch error}
       <div>error.message</div>
       {/await}
+      
 </div>
+
 

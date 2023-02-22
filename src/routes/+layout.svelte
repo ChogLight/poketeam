@@ -63,7 +63,7 @@
     })
 </script>
 
-<div class="app font-mono flex {orientation}">
+<div class="app font-mono flex {orientation} h-screen">
 
     <MediaQuery query="(min-width: 1281px)" let:matches>
         {#if matches}
@@ -80,7 +80,7 @@
             </div>
         {/if}
     </MediaQuery>
-	<main class= "{pageSize} duration-300">
+	<main class= "{pageSize} duration-300 overflow-auto">
 		<slot />
 	</main>
 
