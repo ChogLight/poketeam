@@ -15,7 +15,6 @@
 
     $:{
       url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`;
-      pokemonNumber = pokemonNumber
       pokeArray = [];
       getPokemon()
     }
