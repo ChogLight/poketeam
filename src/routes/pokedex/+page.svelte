@@ -7,7 +7,7 @@
     let counter = 0
     let pageCount = 9
     let currentPage = 1
-    let url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`
+    let url = `https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`
     let promise
     let innerPromise
     let pokeArray = []
@@ -15,13 +15,15 @@
     let numberOfPages
 
     $:{
-      url = `https://pokeapi.co/api/v2/pokemon?limit=${pageCount}&offset=${counter}`;
       numberOfPages = Math.round(pokemonNumber/pageCount) >= pokemonNumber/pageCount? 
         Math.round(pokemonNumber/pageCount):
         Math.round(pokemonNumber/pageCount);
-      pokeArray = [];
-      getPokemon();
+      
     }
+
+    onMount(() => {
+      getPokemon();
+    })
     const getPokemon = async () => {
       const response = await fetch(url)
       promise = response.json()
@@ -31,13 +33,12 @@
         innerPromise = response.json()
         innerPromise.then((poke) => {
           pokeArray.push(poke)
+          console.log(poke)
           pokeArray.sort((a,b) => a.id - b.id)
         })
       })
     })
     }
-
-    console.log(pokemonNumber)
     
 </script>
 
@@ -51,7 +52,7 @@
       {:then results}
         <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
           {#if results !== undefined}
-            {#each pokeArray as pokemon}
+            {#each pokeArray.slice(counter, counter + pageCount) as pokemon}
             <Pokemon pokemon = {pokemon}/>
             {/each}
           {/if}
