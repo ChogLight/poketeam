@@ -28,12 +28,12 @@
     };
 
     const onNext = () => {
-        changePage(currentPage + 1);
+        changePage(parseInt(currentPage) + 1);
      };
 
  
     const onPrevious = () => {
-        changePage(currentPage - 1);
+        changePage(parseInt(currentPage) - 1);
     };  
 
     const isLast = (page) => {
