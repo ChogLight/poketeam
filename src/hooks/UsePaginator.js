@@ -5,6 +5,7 @@ function usePagination(currentPage, numberOfPages) {
     /*
       If there are only 3 or less pages
     */
+    currentPage = parseInt(currentPage)
       if(numberOfPages <=3){
         return numberOfPages === 1?
         [1]:
