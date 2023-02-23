@@ -83,6 +83,4 @@
 	<main class= "{pageSize} duration-300 overflow-auto">
 		<slot />
 	</main>
-
 </div>
-

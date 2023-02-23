@@ -41,7 +41,9 @@
     
 </script>
 
-
+<svelte:head>
+	<title>PokeDex</title>
+</svelte:head>
 <div class="flex flex-col m-auto overflow-auto">
   <Paginator bind:counter bind:pageCount bind:currentPage bind:numberOfPages/>
       {#await innerPromise}

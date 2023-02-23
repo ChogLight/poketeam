@@ -5,6 +5,7 @@
     export let width
     export let height
     export let animation
+    let today = new Date();
 </script>
 
 <div class = "flex flex-col {navBarSize} bg-red-500 items-center text-white h-full duration-300">
@@ -34,6 +35,17 @@
         {/if}
         
     </div>
+    {#if navBarSize === 'basis-1/6'}
+    <footer class="text-xs italic my-3">
+        <p>
+            <a class = "hover:text-yellow-400 duration-300" 
+                href= "https://sebastian-galvis.netlify.app/" target="_blank" rel="noreferrer">
+                Sebastian Galvis
+            </a> {today.getFullYear()} 
+        </p>
+    </footer>
 
+    {/if}
+    
 
 </div>
