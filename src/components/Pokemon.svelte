@@ -15,7 +15,7 @@
 
 </script>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={() => {pokemonModule = pokemon; card = true; console.log(pokemonModule)}} class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
+    <div on:click={() => {pokemonModule = pokemon; card = true;}} class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
         
         <div class="w-1/3 font-bold text-red-600 text-xs mr-5">
             <p>
