@@ -20,25 +20,28 @@
       numberOfPages = Math.round(pokemonNumber/pageCount) >= pokemonNumber/pageCount? 
         Math.round(pokemonNumber/pageCount):
         Math.round(pokemonNumber/pageCount);
+        pokeArray = [...pokeArray]
       
     }
 
     onMount(() => {
-      getPokemon();
+      promise = getPokemon();
     })
     const getPokemon = async () => {
-      const response = await fetch(url)
-      promise = response.json()
-      promise.then(async(pokemonList) => {
-      pokemonList.results.map(async (pokemon)=> {
-        const response = await fetch(pokemon.url)
-        innerPromise = response.json()
-        innerPromise.then((poke) => {
-          pokeArray.push(poke)
-          pokeArray.sort((a,b) => a.id - b.id)
+
+      const response  = await fetch(url)
+      const result  = await response.json()
+      innerPromise = await Promise.all(result.results.map(async(url) => {
+        await fetch(url.url)
+        .then(response => response.json())
+        .then(response =>{
+          pokeArray.push(response)
+          pokeArray.sort((a,b) => {
+            return a.id - b.id
+          })
         })
-      })
-    })
+      }))
+      return pokeArray
     }
 
     const searchPokemon = (pokemonSearch) => {
@@ -61,21 +64,21 @@
   {/if}
   <Paginator bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
     searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
-      {#await innerPromise}
-        <div class="mx-auto content-center">
-          <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
-        </div>
-      {:then results}
-        <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
-          {#if results !== undefined}
-            {#each pokeArray.slice(counter, counter + pageCount) as pokemon}
-              <Pokemon pokemon = {pokemon} bind:pokemonModule bind:card/>
-            {/each}
-          {/if}
-        </div>
-      {:catch error}
-        <div>error.message</div>
-      {/await}
+  {#await promise}
+    <div class="mx-auto content-center">
+      <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
+    </div>
+  {:then results}
+    <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
+      {#if results !== undefined}
+        {#each results.slice(counter, counter + pageCount) as pokemon}
+          <Pokemon pokemon = {pokemon} bind:pokemonModule bind:card/>
+        {/each}
+      {/if}
+    </div>
+  {:catch error}
+    <div>error.message</div>
+  {/await}
 </div>
 
 
