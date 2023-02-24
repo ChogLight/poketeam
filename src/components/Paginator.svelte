@@ -6,8 +6,12 @@
     export let pageCount
     export let currentPage
     export let numberOfPages
+    export let searchPokemon
+    export let pokemonModule
+    export let card
     let paginator
     let arrayOfPages = []
+    let pokemonSearch
     $:{
         paginator = usePagination(currentPage, numberOfPages);
         calculateArrayOfPages();
@@ -49,6 +53,11 @@
 
 
 <div class="flex gap-2 justify-end m-5 flex-wrap font-bold">
+    <div>
+        <label for="pokemonName">Name:</label>
+        <input bind:value = {pokemonSearch} type="text"/>
+        <button on:click={() => {pokemonModule = searchPokemon(pokemonSearch); card = true}}>Search</button>
+    </div>
    <button class = "text-2xl mx-3" disabled = {isFirst(currentPage)} on:click={onPrevious}>{'<'}</button>
     {#each paginator as page}
         {#if page === DOTS}
