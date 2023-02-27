@@ -12,30 +12,24 @@
     let promise
     let innerPromise
     let pokeArray = []
-    let pokemonNumber = 1279
+    let pokemonNumber
     let numberOfPages
     let pokemonModule
     let card = false
     let teamName
     let myTeam = []
-    let i = 0
-    let id
+
+    // Calculates the number of pages
     $:{
       numberOfPages = Math.round(pokemonNumber/pageCount) >= pokemonNumber/pageCount? 
         Math.round(pokemonNumber/pageCount):
         Math.round(pokemonNumber/pageCount);
-        pokeArray = [...pokeArray];
-        id = getID(i)
     }
 
-    onMount(() => {
-      promise = getPokemon();
-    })
-
-    const getID = (i) => {
-      i++
-      return `pokemon_${i}`
+    $:{ 
+        console.log(myTeam)
     }
+    //Post function [post team]
 
     const postTeam = () => {
       fetch('https://pokemonteam-api.onrender.com/poketeam', {
@@ -49,17 +43,31 @@
           pokemon_5: myTeam[4],
           pokemon_6: myTeam[5],
         }),
-        headers: {
-                    'Content-Type': 'application/json'
-                }
-      }).then(response => response.json())
-      .then(data => console.log("Result:", data))
-      .catch(error => console.log("Error:", error))
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Result:", data);
+        if(myTeam.length<6 || teamName == ""){
+          myTeam.length<6?
+          alert("Your team needs 6 Pokemon!!"):
+          alert("Your team needs a name")
+        }
+        else{
+          alert("Team created successfully!");
+        myTeam = [];
+        teamName = ""
+        }
+      })
+      .catch(error =>console.log("Error:", error))
     }
+
+    //Get all pokemon
     const getPokemon = async () => {
 
       const response  = await fetch(url)
       const result  = await response.json()
+      pokemonNumber = result.count
       innerPromise = await Promise.all(result.results.map(async(url) => {
         await fetch(url.url)
         .then(response => response.json())
@@ -73,6 +81,7 @@
       return pokeArray
     }
 
+    //Search pokemon
     const searchPokemon = (pokemonSearch) => {
       if(pokeArray.filter(pokemon => pokemon.name == pokemonSearch.toLowerCase()).length != 0){
         return pokeArray.filter(pokemon => pokemon.name == pokemonSearch.toLowerCase())[0]
@@ -82,15 +91,19 @@
       }
       
     }
-</script>
 
+    onMount(() => {
+      promise = getPokemon();
+    })
+
+</script>
+<!--Title-->
 <svelte:head>
 	<title>PokeDex</title>
 </svelte:head>
+
+<!--Body-->
 <div class="flex flex-col m-auto overflow-auto">
-  {#if card}
-    <Module bind:card bind:myTeam pokemon = {pokemonModule}/>
-  {/if}
   <Paginator bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
     searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
   {#await promise}
@@ -114,13 +127,16 @@
       <input bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
     </div>
     {#each myTeam as pokemon}
-    <div class="flex gap-2">
-      <img class="animate-appear duration-300" src="{pokemon.sprites.front_default}" alt={`${pokemon.name}_img`}>
-      <input id = {id} name = {id} type="hidden" value = {JSON.stringify(pokemon)} visible = "false"/>
-    </div>
-  {/each}
+      <div class="flex gap-2">
+        <img class="animate-appear duration-300" src="{pokemon.sprites.front_default}" alt={`${pokemon.name}_img`}>
+      </div>
+    {/each}
     <button class = "border-4 rounded-full p-2 m-1" on:click={postTeam}>SaveTeam</button>
   </form> 
+  
+  {#if card}
+    <Module bind:card pokemon = {pokemonModule} bind:myTeam/>
+  {/if}
 </div>
 
 

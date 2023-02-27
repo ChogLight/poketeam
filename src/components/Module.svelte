@@ -4,24 +4,23 @@
     export let pokemon
     export let card
     export let myTeam
-
-
-    const addToPC = (array, pokemon) => {
+    
+    //Add pokemon to to team
+    const addToTeam = (array, pokemon) => {
         if(array.includes(pokemon)){
-            alert(`${pokemon.name} is already on your PC!!!`)
+            alert(`${pokemon.name} is already on your Team!!`)
             card = false
         }
         else if (array.length === 6){
-            alert(`You can only have 6 Pokemon in your team!!!`)
+            alert(`You can only have 6 Pokemon in your Team!!!`)
             card = false
         }
         else{
-            array.push(pokemon)
+            myTeam = [...myTeam, pokemon]
             card = false
-            alert(`${pokemon.name} added successfully to your PC`)
         }
     }
-    
+
 </script>
 
 {#if pokemon.id}
@@ -76,18 +75,22 @@
                     </div>
                     
                 </div>
+               
+                <div class="flex justify-between">
+                    <button 
+                    type = "button" 
+                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
+                    on:click={()=>addToTeam(myTeam, pokemon)}>
+                    Add to my Team
+                </button>
+
                 <button 
                     type = "button" 
                     class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
                     on:click={()=>card = false}>
                     Close
                 </button>
-                <button 
-                    type = "button" 
-                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                    on:click={()=>addToPC(myTeam, pokemon)}>
-                    Add to PC
-                </button>
+                </div>
             </div>
             </div>
         </div>
