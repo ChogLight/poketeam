@@ -3,8 +3,24 @@
 
     export let pokemon
     export let card
+    export let myTeam
 
 
+    const addToPC = (array, pokemon) => {
+        if(array.includes(pokemon)){
+            alert(`${pokemon.name} is already on your PC!!!`)
+            card = false
+        }
+        else if (array.length === 6){
+            alert(`You can only have 6 Pokemon in your team!!!`)
+            card = false
+        }
+        else{
+            array.push(pokemon)
+            card = false
+            alert(`${pokemon.name} added successfully to your PC`)
+        }
+    }
     
 </script>
 
@@ -65,6 +81,12 @@
                     class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
                     on:click={()=>card = false}>
                     Close
+                </button>
+                <button 
+                    type = "button" 
+                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
+                    on:click={()=>addToPC(myTeam, pokemon)}>
+                    Add to PC
                 </button>
             </div>
             </div>
