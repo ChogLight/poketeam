@@ -38,7 +38,7 @@
     }
 
     const postTeam = () => {
-      fetch('http://localhost:3000/poketeam', {
+      fetch('https://pokemonteam-api.onrender.com/poketeam', {
         method: 'POST',
         body: JSON.stringify({
           team_name: teamName,
