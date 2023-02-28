@@ -18,6 +18,7 @@
     let card = false
     let teamName
     let myTeam = []
+    let postPromise
 
     // Calculates the number of pages
     $:{
@@ -29,7 +30,7 @@
     //Post function [post team]
 
     const postTeam = () => {
-      fetch('https://pokemonteam-api.onrender.com/poketeam', {
+      postPromise = fetch('https://pokemonteam-api.onrender.com/poketeam', {
         method: 'POST',
         body: JSON.stringify({
           team_name: teamName,
@@ -57,6 +58,8 @@
         }
       })
       .catch(error =>console.log("Error:", error))
+
+      return postPromise
     }
 
     //Get all pokemon
@@ -94,6 +97,7 @@
       myTeam = myTeam.filter(pokemon => pokemon != comparedPokemon)
     }
 
+    //On mount get all Pokemon
     onMount(() => {
       promise = getPokemon();
     })
@@ -108,6 +112,8 @@
 <div class="flex flex-col m-auto overflow-auto">
   <PaginatorPokedex bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
     searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
+
+  <!--Loading screen when fetching all pokemon from PokeAPI-->
   {#await promise}
     <div class="mx-auto content-center">
       <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
@@ -124,6 +130,7 @@
     <div>error.message</div>
   {/await}
 
+   <!--Team builder tool-->
   <div class="flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black">
     <div class="flex gap-2 mx-1 my-2">
       <label class="font-bold" for="team_name">Team Name:</label>
@@ -141,9 +148,32 @@
     {/each}
     <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
 </div> 
+
+<!--Module for each pokemon card-->
   {#if card}
     <Module bind:card pokemon = {pokemonModule} bind:myTeam/>
   {/if}
+
+  <!--Loading screen when creating teams-->
+  {#await postPromise}
+  <div class="mx-auto content-center">
+    <div class="relative z-10" role="dialog">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      <div class="fixed inset-0 z-10 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div class=" animate-appear relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all md:my-8 my-auto md:w-full md:max-w-lg">
+            <h1 class="m-4 text-2xl font-bold">Saving Team...</h1>
+              <div class="flex bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 content-center">
+                <div class="mx-auto content-center">
+                  <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
+                </div>
+              </div>
+          </div>
+          </div>
+      </div>
+  </div>
+  </div>
+  {/await}
 </div>
 
 
