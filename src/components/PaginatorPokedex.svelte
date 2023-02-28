@@ -55,8 +55,8 @@
 <div class="flex gap-2 justify-end m-5 flex-wrap font-bold">
     <div>
         <label for="pokemonName">Name:</label>
-        <input bind:value = {pokemonSearch} type="text"/>
-        <button on:click={() => {pokemonModule = searchPokemon(pokemonSearch); card = true}}>Search</button>
+        <input class="border-2 border-black" bind:value = {pokemonSearch} type="text"/>
+        <button class="border-2 border-black font-bold bg-red-500 rounded-full text-white p-2" on:click={() => {pokemonModule = searchPokemon(pokemonSearch); card = true}}>Search</button>
     </div>
    <button class = "text-2xl mx-3" disabled = {isFirst(currentPage)} on:click={onPrevious}>{'<'}</button>
     {#each paginator as page}
@@ -74,7 +74,7 @@
             <option value = {parseInt(amount)}>{amount} per page</option>
         {/each}
     </select>
-    <div class="content-end">
+    <div class="self-center">
         <lable for="pageNumber">Go to page:</lable>
             <select id="pageNumber" on:change={(e) => changePage(e.target.value)}>
                 {#each arrayOfPages as page}

@@ -3,7 +3,7 @@
     import { onMount } from "svelte"
     import Pokemon from "../../components/Pokemon.svelte"
     import Module from "../../components/Module.svelte";
-    import Paginator from "../../components/Paginator.svelte";
+    import PaginatorPokedex from "../../components/PaginatorPokedex.svelte";
     import Pokeball from "$lib/images/Pokeball.svelte";
     let counter = 0
     let pageCount = 9
@@ -26,9 +26,6 @@
         Math.round(pokemonNumber/pageCount);
     }
 
-    $:{ 
-        console.log(myTeam)
-    }
     //Post function [post team]
 
     const postTeam = () => {
@@ -48,7 +45,7 @@
       .then(response => response.json())
       .then(data => {
         console.log("Result:", data);
-        if(myTeam.length<6 || teamName == ""){
+        if(data.message){
           myTeam.length<6?
           alert("Your team needs 6 Pokemon!!"):
           alert("Your team needs a name")
@@ -72,7 +69,7 @@
         await fetch(url.url)
         .then(response => response.json())
         .then(response =>{
-          pokeArray.push(response)
+          pokeArray = [...pokeArray, response]
           pokeArray.sort((a,b) => {
             return a.id - b.id
           })
@@ -91,6 +88,11 @@
       }
       
     }
+    
+    //Remove from pokemon list
+    const removePokemon = (comparedPokemon) => {
+      myTeam = myTeam.filter(pokemon => pokemon != comparedPokemon)
+    }
 
     onMount(() => {
       promise = getPokemon();
@@ -104,7 +106,7 @@
 
 <!--Body-->
 <div class="flex flex-col m-auto overflow-auto">
-  <Paginator bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
+  <PaginatorPokedex bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
     searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
   {#await promise}
     <div class="mx-auto content-center">
@@ -121,19 +123,24 @@
   {:catch error}
     <div>error.message</div>
   {/await}
-  <form class="flex items-center mx-5 border-4 justify-between">
-    <div class="flex gap-2 mx-1">
-      <label for="team_name">Team Name:</label>
-      <input bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
+
+  <div class="flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black">
+    <div class="flex gap-2 mx-1 my-2">
+      <label class="font-bold" for="team_name">Team Name:</label>
+      <input class="border-2 border-black" bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
     </div>
     {#each myTeam as pokemon}
       <div class="flex gap-2">
-        <img class="animate-appear duration-300" src="{pokemon.sprites.front_default}" alt={`${pokemon.name}_img`}>
+        <div class="relative">
+          <div class="absolute top-3">
+            <button on:click={removePokemon(pokemon)} class="rounded-full text-bold text-base bg-red-500 px-2 text-white">-</button>
+          </div>
+          <img class="animate-appear duration-300" src="{pokemon.sprites.front_default}" alt={`${pokemon.name}_img`}>
+        </div>
       </div>
     {/each}
-    <button class = "border-4 rounded-full p-2 m-1" on:click={postTeam}>SaveTeam</button>
-  </form> 
-  
+    <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
+</div> 
   {#if card}
     <Module bind:card pokemon = {pokemonModule} bind:myTeam/>
   {/if}
