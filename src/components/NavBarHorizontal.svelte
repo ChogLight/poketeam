@@ -16,7 +16,6 @@
     </div> 
     <div class="flex items-center gap-x-5 mr-4">
         <a class="hover:text-yellow-400 duration-100" href="/login"> <i class="fa-solid fa-right-to-bracket"></i></a>
-        <a class = "hover:text-yellow-400 duration-100" href="/signin"><i class="fa-solid fa-pen-nib"></i></a>
     </div>
 
 </nav>

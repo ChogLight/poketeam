@@ -28,10 +28,8 @@
     <div class="basis-1/3 flex items-center text-sm gap-14">
         {#if navBarSize == "basis-1/6"}
             <a class="hover:text-yellow-400 duration-100" href="/login">Log in</a>
-            <a class = "hover:text-yellow-400 duration-100" href="/signin">Sign in</a>
         {:else if navBarSize == "basis-1/12"}
             <i class="fa-solid fa-right-to-bracket"></i>
-            <i class="fa-solid fa-pen-nib"></i>
         {/if}
         
     </div>
