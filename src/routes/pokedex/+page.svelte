@@ -8,10 +8,7 @@
     let counter = 0
     let pageCount = 9
     let currentPage = 1
-    let url = `https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`
-    let promise
-    let innerPromise
-    let pokeArray = []
+    let pokeArray
     let pokemonNumber
     let numberOfPages
     let pokemonModule
@@ -19,6 +16,7 @@
     let teamName
     let myTeam = []
     let postPromise
+    let pokemonArray
 
     // Calculates the number of pages
     $:{
@@ -62,27 +60,8 @@
       return postPromise
     }
 
-    //Get all pokemon
-    const getPokemon = async () => {
-
-      const response  = await fetch(url)
-      const result  = await response.json()
-      pokemonNumber = result.count
-      innerPromise = await Promise.all(result.results.map(async(url) => {
-        await fetch(url.url)
-        .then(response => response.json())
-        .then(response =>{
-          pokeArray = [...pokeArray, response]
-          pokeArray.sort((a,b) => {
-            return a.id - b.id
-          })
-        })
-      }))
-      return pokeArray
-    }
-
     //Search pokemon
-    const searchPokemon = (pokemonSearch) => {
+    const searchPokemon = (pokemonSearch, pokeArray) => {
       if(pokeArray.filter(pokemon => pokemon.name == pokemonSearch.toLowerCase()).length != 0){
         return pokeArray.filter(pokemon => pokemon.name == pokemonSearch.toLowerCase())[0]
       }
@@ -98,10 +77,18 @@
     }
 
     //On mount get all Pokemon
-    onMount(() => {
-      promise = getPokemon();
+    onMount(async () => {
+        let promiseArray
+        const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0")
+        const item = await res.json()
+        const number = item.count
+        promiseArray = item.results.map(async (pokemon) => {
+            return (await fetch(pokemon.url)).json()
+        })
+        pokemonArray = Promise.all(promiseArray)
+        pokeArray = pokemonArray
+        pokemonNumber = number
     })
-
 </script>
 <!--Title-->
 <svelte:head>
@@ -110,25 +97,26 @@
 
 <!--Body-->
 <div class="flex flex-col m-auto overflow-auto">
-  <PaginatorPokedex bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
-    searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
+
 
   <!--Loading screen when fetching all pokemon from PokeAPI-->
-  {#await promise}
-    <div class="mx-auto content-center">
-      <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
-    </div>
-  {:then results}
+
+  {#await pokemonArray}
+  <div class="mx-auto content-center">
+    <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
+  </div>
+  {:then result} 
+  <PaginatorPokedex bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
+    searchPokemon = {searchPokemon} bind:card bind:pokemonModule pokemonArray = {result}/>
     <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
-      {#if results !== undefined}
-        {#each results.slice(counter, counter + pageCount) as pokemon}
+      {#if result !== undefined}
+        {#each result.slice(counter, counter + pageCount) as pokemon}
           <Pokemon pokemon = {pokemon} bind:pokemonModule bind:card/>
         {/each}
       {/if}
     </div>
-  {:catch error}
-    <div>error.message</div>
   {/await}
+    
 
    <!--Team builder tool-->
   <div class="flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black">
@@ -136,16 +124,18 @@
       <label class="font-bold" for="team_name">Team Name:</label>
       <input class="border-2 border-black" bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
     </div>
+    <div class="md:flex grid grid-cols-2 gap-2">
     {#each myTeam as pokemon}
-      <div class="flex gap-2">
+      
         <div class="relative">
           <div class="absolute top-3">
             <button on:click={removePokemon(pokemon)} class="rounded-full text-bold text-base bg-red-500 px-2 text-white">-</button>
           </div>
           <img class="animate-appear duration-300" src="{pokemon.sprites.front_default}" alt={`${pokemon.name}_img`}>
         </div>
-      </div>
+      
     {/each}
+  </div>
     <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
 </div> 
 

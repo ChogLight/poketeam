@@ -9,6 +9,7 @@
     export let searchPokemon
     export let pokemonModule
     export let card
+    export let pokemonArray
     let paginator
     let arrayOfPages = []
     let pokemonSearch
@@ -56,7 +57,7 @@
     <div>
         <label for="pokemonName">Name:</label>
         <input class="border-2 border-black" bind:value = {pokemonSearch} type="text"/>
-        <button class="border-2 border-black font-bold bg-red-500 rounded-full text-white p-2" on:click={() => {pokemonModule = searchPokemon(pokemonSearch); card = true}}>Search</button>
+        <button class="border-2 border-black font-bold bg-red-500 rounded-full text-white p-2" on:click={() => {pokemonModule = searchPokemon(pokemonSearch, pokemonArray); card = true}}>Search</button>
     </div>
    <button class = "text-2xl mx-3" disabled = {isFirst(currentPage)} on:click={onPrevious}>{'<'}</button>
     {#each paginator as page}
