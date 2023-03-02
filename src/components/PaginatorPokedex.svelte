@@ -1,27 +1,22 @@
 
 <script>
 // @ts-nocheck
+// Change paginator links and link with pages
     import usePagination, {DOTS} from "../hooks/UsePaginator";
-    export let counter
-    export let pageCount
-    export let currentPage
     export let numberOfPages
     export let searchPokemon
     export let pokemonModule
+    export let by
     export let card
     let paginator
+    let currentPage = 1
     let arrayOfPages = []
     let pokemonSearch
+    let pageCount = 9
+    let amounts = [9,18,36,72]
     $:{
         paginator = usePagination(currentPage, numberOfPages);
         calculateArrayOfPages();
-    };
-
-    
-    let amounts = [9, 18, 36, 72 ]
-    const changePage = (page)=>{
-        counter = pageCount*page - pageCount
-        currentPage = page
     };
 
     const calculateArrayOfPages = () => {
@@ -32,12 +27,12 @@
     };
 
     const onNext = () => {
-        changePage(parseInt(currentPage) + 1);
+        currentPage = parseInt(currentPage) + 1;
      };
 
  
     const onPrevious = () => {
-        changePage(parseInt(currentPage) - 1);
+        currentPage = parseInt(currentPage) - 1;
     };  
 
     const isLast = (page) => {
@@ -48,6 +43,8 @@
         return page === 1
     };
 
+    console.log(numberOfPages)
+    
 
 </script>
 
@@ -64,19 +61,19 @@
             <h1>{page}</h1>
         {:else}
         <div class="flex gap-5 rounded-full bg-red-600 p-1 text-white">
-            <button on:click={changePage(page)}>{page}</button>
+            <a href={`/pokedex/${page}?by=${pageCount}`}>{page}</a>
         </div>
         {/if}
     {/each}
     <button class = "text-2xl mx-3" disabled = {isLast(currentPage)} on:click={onNext}>{'>'}</button>
-    <select bind:value = {pageCount} on:change = {() => {changePage(1)}}>
+    <select bind:value = {pageCount} on:change = {() => {currentPage = 1}}>
         {#each amounts as amount}
             <option value = {parseInt(amount)}>{amount} per page</option>
         {/each}
     </select>
     <div class="self-center">
         <lable for="pageNumber">Go to page:</lable>
-            <select id="pageNumber" on:change={(e) => changePage(e.target.value)}>
+            <select id="pageNumber" on:change={(e) => currentPage = e.target.value}>
                 {#each arrayOfPages as page}
                     <option value = {parseInt(page)}>{page}</option>
                 {/each}

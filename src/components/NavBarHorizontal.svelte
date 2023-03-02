@@ -11,7 +11,7 @@
     <a href="/"><Pokeball width = {width} height = {height} animation = {animation}/></a>
     <div class="flex gap-x-10 text-xl font-bold items-center">
         <a class="basis-1/3" href="/"><i class="fa-solid fa-house"></i></a>
-        <a class="basis-1/3" href="/pokedex"><i class="fa-sharp fa-solid fa-mobile-retro"></i></a>
+        <a class="basis-1/3" href="/pokedex/1"><i class="fa-sharp fa-solid fa-mobile-retro"></i></a>
         <a class="basis-1/3" href="/teambuilder"><i class="fa-solid fa-hammer"></i></a>
     </div> 
     <div class="flex items-center gap-x-5 mr-4">

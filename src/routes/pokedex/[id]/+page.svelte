@@ -1,19 +1,12 @@
 <script>
 // @ts-nocheck
-    import { onMount } from "svelte"
-    import Pokemon from "../../components/Pokemon.svelte"
-    import Module from "../../components/Module.svelte";
-    import PaginatorPokedex from "../../components/PaginatorPokedex.svelte";
+ /** @type {import('./$types').PageData} */
+    import Pokemon from "../../../components/Pokemon.svelte"
+    import Module from "../../../components/Module.svelte";
+    import PaginatorPokedex from "../../../components/PaginatorPokedex.svelte";
     import Pokeball from "$lib/images/Pokeball.svelte";
-    let counter = 0
-    let pageCount = 9
-    let currentPage = 1
-    let url = `https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0`
-    let promise
-    let innerPromise
-    let pokeArray = []
-    let pokemonNumber
-    let numberOfPages
+    export let data;
+    let pokemonNumber = Math.round(data.item.count / data.by)
     let pokemonModule
     let card = false
     let teamName
@@ -21,11 +14,6 @@
     let postPromise
 
     // Calculates the number of pages
-    $:{
-      numberOfPages = Math.round(pokemonNumber/pageCount) >= pokemonNumber/pageCount? 
-        Math.round(pokemonNumber/pageCount):
-        Math.round(pokemonNumber/pageCount);
-    }
 
     //Post function [post team]
 
@@ -62,25 +50,6 @@
       return postPromise
     }
 
-    //Get all pokemon
-    const getPokemon = async () => {
-
-      const response  = await fetch(url)
-      const result  = await response.json()
-      pokemonNumber = result.count
-      innerPromise = await Promise.all(result.results.map(async(url) => {
-        await fetch(url.url)
-        .then(response => response.json())
-        .then(response =>{
-          pokeArray = [...pokeArray, response]
-          pokeArray.sort((a,b) => {
-            return a.id - b.id
-          })
-        })
-      }))
-      return pokeArray
-    }
-
     //Search pokemon
     const searchPokemon = (pokemonSearch) => {
       if(pokeArray.filter(pokemon => pokemon.name == pokemonSearch.toLowerCase()).length != 0){
@@ -96,12 +65,8 @@
     const removePokemon = (comparedPokemon) => {
       myTeam = myTeam.filter(pokemon => pokemon != comparedPokemon)
     }
-
-    //On mount get all Pokemon
-    onMount(() => {
-      promise = getPokemon();
-    })
-
+    
+    console.log(pokemonNumber)
 </script>
 <!--Title-->
 <svelte:head>
@@ -110,25 +75,16 @@
 
 <!--Body-->
 <div class="flex flex-col m-auto overflow-auto">
-  <PaginatorPokedex bind:counter bind:pageCount bind:currentPage bind:numberOfPages 
-    searchPokemon = {searchPokemon} bind:card bind:pokemonModule/>
 
+
+  <PaginatorPokedex searchPokemon = {searchPokemon} numberOfPages = {pokemonNumber} by = {data.by}/>
   <!--Loading screen when fetching all pokemon from PokeAPI-->
-  {#await promise}
-    <div class="mx-auto content-center">
-      <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
-    </div>
-  {:then results}
+
     <div class="md:grid grid-cols-3 gap-4 mt-10 w-full">
-      {#if results !== undefined}
-        {#each results.slice(counter, counter + pageCount) as pokemon}
+        {#each data.pokemon as pokemon}
           <Pokemon pokemon = {pokemon} bind:pokemonModule bind:card/>
         {/each}
-      {/if}
     </div>
-  {:catch error}
-    <div>error.message</div>
-  {/await}
 
    <!--Team builder tool-->
   <div class="flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black">

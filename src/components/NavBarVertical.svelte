@@ -15,7 +15,7 @@
     <nav class="flex flex-col basis-2/3 text-2xl font-bold items-center">
         {#if navBarSize <= "basis-1/6" && navBarSize> "basis-1/12"}
             <a class="basis-1/3 hover:text-3xl duration-300" href="/">Home</a>
-            <a class="basis-1/3 hover:text-3xl duration-300" href="/pokedex">PokeDex</a>
+            <a class="basis-1/3 hover:text-3xl duration-300" href="/pokedex/1">PokeDex</a>
             <a class="text-xl basis-1/3 hover:text-3xl duration-300" href="/teambuilder">Team builder</a>
         {:else if navBarSize === "basis-1/12"}
             <a class="basis-1/3" href="/"><i class="fa-solid fa-house"></i></a>
@@ -34,7 +34,8 @@
         
     </div>
     {#if navBarSize === 'basis-1/6'}
-    <footer class="text-xs italic my-3">
+    <footer class="text-sm italic my-3 text-black flex font-bold gap-2">
+        <Pokeball animation = {"none"} height = "20px" width = "20px"/>
         <p>
             <a class = "hover:text-yellow-400 duration-300" 
                 href= "https://sebastian-galvis.netlify.app/" target="_blank" rel="noreferrer">
