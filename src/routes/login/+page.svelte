@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <div class="md:flex flex-col text-black bg-red-500 py-10 px-24 gap-2 rounded-xl md:overflow-scroll hidden">
+    <div class="md:flex flex-col text-black bg-red-500 py-10 px-24 gap-2 rounded-xl md:overflow-x-auto hidden">
         <h1 class="text-5xl my-10 text-white text-center font-extrabold">Sign in</h1>
 
         <div class="mb-20 mt-10 text-xl">
@@ -51,3 +51,18 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* width */
+  ::-webkit-scrollbar {
+    width: 10px;
+  
+  }
+
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(232, 167, 167)5F;
+    border-radius: 10px;
+  }
+  </style>
