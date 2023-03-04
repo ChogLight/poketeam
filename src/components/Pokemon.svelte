@@ -1,8 +1,10 @@
 <script>
 // @ts-nocheck
+
+    import Pokeball from "$lib/images/Pokeball.svelte";
+    import { beforeUpdate } from "svelte";
+    import Layout from "../routes/+layout.svelte";
     export let pokemon
-    export let pokemonModule
-    export let card
     const getType = (types) => {
 
         if (types[1]) {
@@ -14,8 +16,14 @@
     }
 
 </script>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div on:click={() => {pokemonModule = pokemon; card = true;}} class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
+
+{#await pokemon}
+    <div class="mx-auto">
+        <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
+    </div>
+{:then pokemon } 
+{#if !pokemon.message}
+    <div class="bg-white rounded-md mx-5 my-3 flex p-3 hover:scale-105 duration-500 shadow-lg cursor-pointer">
         
         <div class="w-1/3 font-bold text-red-600 text-xs mr-5">
             <p>
@@ -58,3 +66,8 @@
             
         </div>
     </div>
+    {:else}
+        <h1>{pokemon.message}</h1>
+    {/if}
+{/await}
+   

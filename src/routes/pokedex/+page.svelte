@@ -12,6 +12,8 @@
     let teamName
     let myTeam = []
     let postPromise
+    let pokemonSearched = { message: "Select a Pokemon"}
+    let url = {message:"Select a Pokemon"}
     const {item, length} = data
     const pageCount  = Math.round(length/150) + 1
     // Calculates the number of pages
@@ -56,8 +58,12 @@
     const removePokemon = (comparedPokemon) => {
       myTeam = myTeam.filter(pokemon => pokemon != comparedPokemon)
     }
-
-
+    //Fetch Pokemon
+    const fetchPokemon = async(url) => {
+      const res = await fetch(url)
+      const pokemon = await res.json()
+      return pokemon
+    }
 </script>
 <!--Title-->
 <svelte:head>
@@ -72,7 +78,7 @@
     <div class="flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black">
       <div class="flex gap-2 mx-1 my-2">
         <label class="font-bold" for="team_name">Team Name:</label>
-        <input class="border-2 border-black" bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
+        <input autocomplete="off" class="border-2 border-black" bind:value = {teamName} id = "team_name" name = "team_name" type="text"/>
       </div>
       <div class="md:flex grid grid-cols-2 gap-2">
       {#each myTeam as pokemon}
@@ -88,6 +94,8 @@
     </div>
       <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
     </div> 
+
+    <Pokemon bind:pokemon = {pokemonSearched}/>
   </div>
   
   <div class="md:basis-1/5 p-5 overflow-auto" dir="rtl">
@@ -99,7 +107,9 @@
         item.results.filter(pokemon => pokemon.name.includes(pokemonQuery.toLowerCase()))
         as pokemon}
         <li class="text-center py-1">
-          <button class="gap-2 text-left w-5/6 bg-red-500 p-2 m-1 text-xl font-bold text-white drop-shadow-lg active:drop-shadow-sm shadow-black rounded-r-full">
+          <button on:click={(() => pokemonSearched = fetchPokemon(pokemon.url))}
+            class="gap-2 text-left w-5/6 bg-red-500 p-2 m-1 text-xl font-bold 
+              text-white drop-shadow-lg active:drop-shadow-sm shadow-black rounded-r-full">
             <div class="flex">
               <div class="mx-2 mt-1">
                 <Pokeball height = "20px" width = "20px" animation="none"/> 
@@ -111,14 +121,6 @@
       {/each}
     </ul>
   </div>
-
-
-
-  
-
-<!--Module for each pokemon card-->
-
-  <!--Loading screen when creating teams-->
 </div>
 
 
