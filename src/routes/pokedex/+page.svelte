@@ -4,6 +4,7 @@
     import Module from "../../components/Module.svelte";
     import PaginatorPokedex from "../../components/PaginatorPokedex.svelte";
     import Pokeball from "$lib/images/Pokeball.svelte";
+    import MediaQuery from "../../components/MediaQuery.svelte";
     export let data
     let pokemonModule
     let pokemonQuery = ""
@@ -95,7 +96,23 @@
       <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
     </div> 
 
-    <Pokemon bind:pokemon = {pokemonSearched}/>
+    <MediaQuery query="(min-width: 1281px)" let:matches>
+
+      {#if matches}
+        <Pokemon bind:pokemon = {pokemonSearched}/>
+      {/if}
+
+    </MediaQuery>
+
+    <MediaQuery query = "(max-width: 428px)" let:matches>
+
+      {#if matches}
+        {#if card}
+          <Module pokemon = {pokemonSearched} bind:card bind:myTeam/>
+        {/if}
+      {/if}
+    </MediaQuery>
+    
   </div>
   
   <div class="md:basis-1/5 p-5 overflow-auto" dir="rtl">
@@ -107,7 +124,7 @@
         item.results.filter(pokemon => pokemon.name.includes(pokemonQuery.toLowerCase()))
         as pokemon}
         <li class="text-center py-1">
-          <button on:click={(() => pokemonSearched = fetchPokemon(pokemon.url))}
+          <button on:click={(() => {pokemonSearched = fetchPokemon(pokemon.url); card = true})}
             class="gap-2 text-left w-5/6 bg-red-500 p-2 m-1 text-xl font-bold 
               text-white drop-shadow-lg active:drop-shadow-sm shadow-black rounded-r-full">
             <div class="flex">

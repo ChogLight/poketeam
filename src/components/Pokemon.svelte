@@ -2,8 +2,6 @@
 // @ts-nocheck
 
     import Pokeball from "$lib/images/Pokeball.svelte";
-    import { beforeUpdate } from "svelte";
-    import Layout from "../routes/+layout.svelte";
     export let pokemon
     const getType = (types) => {
 
