@@ -28,12 +28,12 @@
         method: 'POST',
         body: JSON.stringify({
           team_name: teamName,
-          pokemon_1: myTeam[0],
-          pokemon_2: myTeam[1],
-          pokemon_3: myTeam[2],
-          pokemon_4: myTeam[3],
-          pokemon_5: myTeam[4],
-          pokemon_6: myTeam[5],
+          pokemon_1: {name: myTeam[0].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[0].name}`},
+          pokemon_2: {name: myTeam[1].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[1].name}`},
+          pokemon_3: {name: myTeam[2].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[2].name}`},
+          pokemon_4: {name: myTeam[3].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[3].name}`},
+          pokemon_5: {name: myTeam[4].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[4].name}`},
+          pokemon_6: {name: myTeam[5].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[5].name}`}
         }),
         headers: {'Content-Type': 'application/json'}
       })
@@ -85,6 +85,7 @@
 <!--Body-->
 <div class="flex md:flex-row flex-col m-auto h-full">
 
+  <!--Used to hide and show team selector on mobile-->
   <MediaQuery query = "(max-width: 428px)" let:matches>
     {#if matches}
       <button on:click={() => {teamHidden = !teamHidden}} class="rounded-full text-white bg-red-500 mx-{teamHidden?"40":"44"} my-5">
@@ -97,6 +98,7 @@
     {/if}
   </MediaQuery>
   
+  <!--My team selector (innner pokemon loading)-->
   <div class="md:basis-4/5 p-5 md:flex md:flex-col {teamHidden? "hidden":""}">
     <div class="basis-1/12 flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black ">
       <div class="flex gap-2 mx-1 my-2">
@@ -118,21 +120,24 @@
         <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
       </div> 
 
+    <!--Pokemon Loading-->
     <MediaQuery query="(min-width: 1281px)" let:matches>
 
       {#if matches}
-        <Pokemon bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
+        <Pokemon bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
       {/if}
 
     </MediaQuery>
   </div>
+  <!--Pokemon shown when width is 428px or less-->
   <MediaQuery query = "(max-width: 428px)" let:matches>
 
     {#if matches}
         <Module pokemon = {pokemonSearched} capitalizeWord = {capitalizeWord} weakneasses = {pokemonWeakness} bind:card bind:myTeam/>
     {/if}
   </MediaQuery>
-  <div class="md:basis-1/5 p-5 overflow-auto" dir="rtl">
+  <!--List of Pokemon-->
+  <div class="md:basis-1/5 p-5 overflow-auto h-screen" dir="rtl">
     <PaginatorPokedex pageCount = {pageCount} bind:currentPage bind:pokemonQuery/>
     <ul class=" bg-red-400 rounded-lg" dir="ltr">
       {#each 

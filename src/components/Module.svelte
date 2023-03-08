@@ -194,7 +194,7 @@
                         datasets:[
                             {
                                 label: `${capitalizeWord(pokemon.name)} Weakneasses`,
-                                fill: true,
+                                pointRadius: 0,
                                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                 borderColor: 'rgb(255, 99, 132)',
                                 pointBackgroundColor: 'rgb(255, 99, 132)',
