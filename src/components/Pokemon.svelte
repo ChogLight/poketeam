@@ -1,6 +1,7 @@
 <script>
 // @ts-nocheck
     import Pokeball from "$lib/images/Pokeball.svelte";
+    import PaginatorPokedex from "./PaginatorPokedex.svelte";
     import { Radar } from 'svelte-chartjs'
     import {
     Chart as ChartJS,
@@ -23,6 +24,7 @@
     export let capitalizeWord
     export let weakneasses
     export let myTeam
+    export let moveFetched
     let page = 1
     const getType = (types) => {
 
@@ -44,7 +46,10 @@
             myTeam = [...myTeam, pokemon]
         }
     }
-
+    const getMove = async (move) => {
+        const res = await fetch(move)
+        moveFetched = await res.json()
+    }
 </script>
 
 {#await pokemon}
@@ -150,8 +155,7 @@
                                 ],
                                 datasets:[
                                     {
-                                        label: `${capitalizeWord(pokemon.name)} Weakneasses`,
-                                        fill: true,
+                                        label: `${capitalizeWord(pokemon.name)} Weaknesses`,
                                         backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                         borderColor: 'rgb(255, 99, 132)',
                                         pointBackgroundColor: 'rgb(255, 99, 132)',
@@ -180,12 +184,51 @@
     </div>
     <div class="flex flex-col bg-white rounded-md mx-5 my-3 p-5 shadow-lg basis-11/12 gap-10 {page ==2? "":"hidden"} overflow-y-scroll">
         <h1 class=" text-red-500 font-bold text-6xl basis-1/5 capitalize">{pokemon.name} moves</h1>
-        <div class="grid grid-cols-10 text-sm font-bold content-center">
-            {#each pokemon.moves as move}
-                <div class="border border-black text-center capitalize py-1">
-                        {move.move.name}
-                </div>
-            {/each}
+        <div class="flex text-sm font-bold content-center h-3/5 gap-20">
+            <div class="basis-1/5 overflow-y-scroll">
+                <ul class="">
+                    {#each pokemon.moves as move}
+                        <li class="even:bg-red-200 odd:bg-slate-50"><button class="capitalize" on:click={() => {getMove(move.move.url)}} >{move.move.name}</button></li>
+                        
+                    {/each}
+                </ul>
+            </div>
+            <div class="basis-4/5">
+                {#await moveFetched}
+                    <h1>...Loading</h1>
+                {:then moveFetched } 
+                    {#if moveFetched.message}
+                        <div class="flex justify-center items-center flex-1 text-xs opacity-50 h-full ">
+                            {moveFetched.message}
+                        </div>
+                    {:else}
+                        <div class="flex flex-col gap-5 border-black border p-5">
+                            <div class="flex gap-10">
+                                <h1 class="text-4xl text-red-500 font-bold capitalize">{moveFetched.name}</h1>
+                            </div>
+                            <p>{moveFetched.flavor_text_entries.length > 0?
+                                    moveFetched.flavor_text_entries.find(text => text.language.name == 'en').flavor_text:""}</p>
+                            <div class="flex gap-5">
+                                <h2 class="text-xl text-red-500 font-bold">Type:</h2>
+                                <p class="text-lg capitalize align-bottom">{moveFetched.type.name}</p>
+                            </div>
+                            <div class="flex gap-5">
+                                <h2 class="text-xl text-red-500 font-bold">Power:</h2>
+                                <p class="text-lg capitalize align-bottom">{moveFetched.power}</p>
+                            </div>
+                            <div class="flex gap-5">
+                                <h2 class="text-xl text-red-500 font-bold">Damage class:</h2>
+                                <p class="text-lg capitalize align-bottom">{moveFetched.damage_class.name}</p>
+                            </div>
+                            <div class="flex gap-5">
+                                <h2 class="text-xl text-red-500 font-bold">Accuracy:</h2>
+                                <p class="text-lg capitalize align-bottom">{moveFetched.accuracy}</p>
+                            </div>
+                        </div>
+                    {/if}
+                {/await}
+            </div>
+            
         </div>
         
     </div>

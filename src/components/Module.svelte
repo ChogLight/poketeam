@@ -21,9 +21,17 @@
   );
     export let pokemon
     export let card
-    export let myTeam
+    export let myTeam = []
     export let weakneasses
     export let capitalizeWord
+    export let moveFetched
+    export let option
+    export let deletePokemon
+    //Fetch move
+    const getMove = async (move) => {
+        const res = await fetch(move)
+        moveFetched = await res.json()
+    }
     
     //Add pokemon to to team
     const addToTeam = (array, pokemon) => {
@@ -133,40 +141,74 @@
                 </div>
                 
             </div>
-            <div class="flex bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 {page==2? "":"hidden"}">
-                <table class="basis 1/2 border border-black">
-                    <thead>
-                        <th>Stat name</th>
-                        <th>Base stat</th>
-                        <th>EV</th>
+            <div class="flex flex-col bg-white justify-center px-3 pt-5 pb-4 {page==2? "":"hidden"}">
+                <h1 class="text-2xl text-red-500 font-bold capitalize">{pokemon.name} stats</h1>
+                <table class="table-auto basis 1/2 border border-black text-left my-10">
+                    <thead class="border border-black">
+                        <th class="py-2 px-1 border border-black">Stat name</th>
+                        <th class="py-2 px-1  border border-black">Base stat</th>
+                        <th class="py-2 px-1  border border-black">EV</th>
                     </thead>
                     <tbody>
                         {#each pokemon.stats as stats}
-                            <tr class="capitalize">
-                                <td>{stats.stat.name}</td>
-                                <td>{stats.base_stat}</td>
-                                <td>{stats.effort}</td>
+                            <tr class="odd:bg-white even:bg-red-200 text-sm odd:hover:bg-slate-100 even:hover:bg-red-300">
+                                <td class="border border-black">{capitalizeWord(stats.stat.name)}</td>
+                                <td class="border border-black">{stats.base_stat}</td>
+                                <td class="border border-black">{stats.effort}</td>
                             </tr>
                         {/each}
                     </tbody>
                 </table>
                 
             </div>
-            <div class="flex justify-center bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 {page==3? "":"hidden"}">
-                <div class=" max-h-96 overflow-y-scroll border border-black">
-                    <table>
-                        <thead>
-                            <th>Move Name</th>
-                        </thead>
-                        <tbody class="overflow-hidden">
-                            {#each pokemon.moves as move}
-                                <tr>
-                                    <td class="capitalize">{(move.move.name)}</td>
-                                </tr>
-                            {/each}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="flex flex-col basis-11/12 gap-10 p-10 {page==3? "":"hidden"}">
+                <h1 class=" text-red-500 font-bold text-2xl basis-1/5 capitalize">{pokemon.name} moves</h1>
+        <div class="flex text-sm font-bold content-center h-3/5">
+            <div class="basis-1/5 overflow-y-scroll">
+                <ul class=" h-44">
+                    {#each pokemon.moves as move}
+                        <li class="even:bg-red-200 odd:bg-slate-50"><button class="capitalize" on:click={() => {getMove(move.move.url)}} >{move.move.name}</button></li>
+                        
+                    {/each}
+                </ul>
+            </div>
+            <div class="basis-4/5">
+                {#await moveFetched}
+                    <h1>...Loading</h1>
+                {:then moveFetched } 
+                    {#if moveFetched.message}
+                        <div class="flex justify-center items-center flex-1 text-xs opacity-50 h-full ">
+                            {moveFetched.message}
+                        </div>
+                    {:else}
+                        <div class="flex flex-col gap-5 border-black border p-5">
+                            <div class="flex gap-10">
+                                <h1 class="text-xl text-red-500 font-bold capitalize">{moveFetched.name}</h1>
+                            </div>
+                            <p class="text-sm">{moveFetched.flavor_text_entries.length > 0?
+                                    moveFetched.flavor_text_entries.find(text => text.language.name == 'en').flavor_text:""}</p>
+                            <div class="flex items-center">
+                                <h2 class="text-lg text-red-500 font-bold">Type:</h2>
+                                <p class="text-sm capitalize align-bottom">{moveFetched.type.name}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <h2 class="text-lg text-red-500 font-bold">Power:</h2>
+                                <p class="text-sm capitalize align-bottom">{moveFetched.power}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <h2 class="text-lg text-red-500 font-bold">Damage class:</h2>
+                                <p class="text-sm capitalize align-bottom">{moveFetched.damage_class.name}</p>
+                            </div>
+                            <div class="flex items-center">
+                                <h2 class="text-lg text-red-500 font-bold">Accuracy:</h2>
+                                <p class="text-sm capitalize align-bottom">{moveFetched.accuracy}</p>
+                            </div>
+                        </div>
+                    {/if}
+                {/await}
+            </div>
+            
+        </div>
             </div>
             <div class="flex bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 {page==4? "":"hidden"}">
                 <Radar data = {
@@ -193,7 +235,7 @@
                         ],
                         datasets:[
                             {
-                                label: `${capitalizeWord(pokemon.name)} Weakneasses`,
+                                label: `${capitalizeWord(pokemon.name)} weaknesses`,
                                 pointRadius: 0,
                                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                 borderColor: 'rgb(255, 99, 132)',
@@ -212,14 +254,21 @@
                 <button 
                 type = "button" 
                 class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                on:click={()=>addToTeam(myTeam, pokemon)}>
-                Add to my Team
+                on:click={()=>{
+                    if(option === "Add"){
+                        addToTeam(myTeam, pokemon)
+                    }
+                    else{
+                        deletePokemon(pokemon.name)
+                    }
+                    }}>
+                {option}
             </button>
 
             <button 
                 type = "button" 
                 class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                on:click={()=>{card = false; page = 1}}>
+                on:click={()=>{card = false; page = 1; moveFetched = Promise.resolve({message: "Select a move"})}}>
                 Close
             </button>
             </div>

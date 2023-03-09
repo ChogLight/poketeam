@@ -13,8 +13,9 @@
     let teamName
     let myTeam = []
     let postPromise
-    let teamHidden = false
+    let teamHidden = true
     let pokemonSearched = { message: "Select a Pokemon"}
+    let moveFetched = Promise.resolve({message: "Select a move"})
     const {item, length} = data
     const pageCount  = Math.round(length/150) + 1
     // Calculates the number of pages
@@ -28,12 +29,30 @@
         method: 'POST',
         body: JSON.stringify({
           team_name: teamName,
-          pokemon_1: {name: myTeam[0].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[0].name}`},
-          pokemon_2: {name: myTeam[1].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[1].name}`},
-          pokemon_3: {name: myTeam[2].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[2].name}`},
-          pokemon_4: {name: myTeam[3].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[3].name}`},
-          pokemon_5: {name: myTeam[4].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[4].name}`},
-          pokemon_6: {name: myTeam[5].name, url:`https://pokeapi.co/api/v2/pokemon/${myTeam[5].name}`}
+          pokemon_1: {
+            name: myTeam[0].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[0].name}`
+          },
+          pokemon_2: {
+            name: myTeam[1].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[1].name}`
+          },
+          pokemon_3: {
+            name: myTeam[2].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[2].name}`
+          },
+          pokemon_4: {
+            name: myTeam[3].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[3].name}`
+          },
+          pokemon_5: {
+            name: myTeam[4].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[4].name}`
+          },
+          pokemon_6: {
+            name: myTeam[5].name, 
+            url:`https://pokeapi.co/api/v2/pokemon/${myTeam[5].name}`
+          }
         }),
         headers: {'Content-Type': 'application/json'}
       })
@@ -88,11 +107,11 @@
   <!--Used to hide and show team selector on mobile-->
   <MediaQuery query = "(max-width: 428px)" let:matches>
     {#if matches}
-      <button on:click={() => {teamHidden = !teamHidden}} class="rounded-full text-white bg-red-500 mx-{teamHidden?"40":"44"} my-5">
+      <button on:click={() => {teamHidden = !teamHidden}} class=" text-xs rounded-full text-white bg-red-500 mx-40 my-5 px-2">
         {#if teamHidden}
-          <h1>My team</h1>
+          <p>My team</p>
         {:else}
-          <i class="fa-solid fa-arrow-up"></i>
+          <p>Hide</p>
         {/if}
       </button>
     {/if}
@@ -124,7 +143,7 @@
     <MediaQuery query="(min-width: 1281px)" let:matches>
 
       {#if matches}
-        <Pokemon bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
+        <Pokemon bind:moveFetched bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
       {/if}
 
     </MediaQuery>
@@ -133,20 +152,22 @@
   <MediaQuery query = "(max-width: 428px)" let:matches>
 
     {#if matches}
-        <Module pokemon = {pokemonSearched} capitalizeWord = {capitalizeWord} weakneasses = {pokemonWeakness} bind:card bind:myTeam/>
+        <Module option = {"Add"} bind:moveFetched pokemon = {pokemonSearched} capitalizeWord = {capitalizeWord} weakneasses = {pokemonWeakness} bind:card bind:myTeam/>
     {/if}
   </MediaQuery>
   <!--List of Pokemon-->
-  <div class="md:basis-1/5 p-5 overflow-auto h-screen" dir="rtl">
+  <div class="md:basis-1/5  bg-red-400 p-5 overflow-auto h-screen" dir="rtl">
     <PaginatorPokedex pageCount = {pageCount} bind:currentPage bind:pokemonQuery/>
-    <ul class=" bg-red-400 rounded-lg" dir="ltr">
+    <ul class=" rounded-lg" dir="ltr">
       {#each 
         pokemonQuery === ""?
         item.results.slice(150*(currentPage - 1),currentPage*150):
         item.results.filter(pokemon => pokemon.name.includes(pokemonQuery.toLowerCase()))
         as pokemon}
         <li class="text-center py-1">
-          <button on:click={(() => {pokemonSearched = fetchPokemon(pokemon.url); card = true})}
+          <button on:click={(() => {pokemonSearched = fetchPokemon(pokemon.url); card = true; moveFetched = Promise.resolve({
+            message:"Select a move"
+          })})}
             class="gap-2 text-left w-5/6 bg-red-500 p-2 m-1 text-xl font-bold 
               text-white drop-shadow-lg active:drop-shadow-sm shadow-black rounded-r-full">
             <div class="flex">
@@ -198,7 +219,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #FA5F5F;
+  background: #908787;
   border-radius: 10px;
 }
 </style>

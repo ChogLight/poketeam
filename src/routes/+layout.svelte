@@ -76,7 +76,7 @@
     <MediaQuery query = "(max-width: 428px)" let:matches>
         {#if matches}
             <div on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} class="{navBarSize} duration-300">
-                <NavBarHorizontal navBarSize={navBarSize} width = {width} heigth = {height} animation = {animation}/>
+                <NavBarHorizontal navBarSize={navBarSize} width = {width} height = {height} animation = {animation}/>
             </div>
         {/if}
     </MediaQuery>
