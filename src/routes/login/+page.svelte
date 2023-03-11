@@ -3,13 +3,13 @@
 
 </script>
 <div class="flex md:flex-row flex-col h-full m-10 md:justify-around justify-between gap-10">
-    <form  class="flex flex-col text-black bg-red-500 py-10 px-10 md:px-24 gap-2 rounded-xl" method = "POST" action="?/login">
+    <form  class="flex flex-col text-black bg-red-500 py-10 md:px-24 gap-2 rounded-xl items-center px-10" method = "POST" action="?/login">
         
         <h1 class="text-5xl my-10 text-white text-center font-extrabold">Login</h1>
         {#if form?.error}
             <h2 class=" animate-appear capitalize text-white font-bold text-lg">{form.error}</h2>
         {/if}
-        <div class="mb-20 mt-10 text-xl">
+        <div class="mb-20 mt-10 text-xl mx-10 md:mx-0">
             <p class=" text-white font-bold">Username</p>
             <input required name="userlog" id="userlog" class="bg-red-500 outline-none text-white placeholder:text-white placeholder:opacity-40" type="text" placeholder="Username"/>
         </div>
@@ -24,12 +24,12 @@
         </div>
     </form>
 
-    <form class="md:flex flex-col text-black bg-red-500 py-10 md:px-24 px-10 gap-2 rounded-xl md:overflow-x-auto" method="POST" action="?/signin">
+    <form class="flex flex-col text-black bg-red-500 py-10 md:px-24 gap-2 rounded-xl items-center px-10 md:overflow-y-scroll" method="POST" action="?/signin">
         <h1 class="text-5xl my-10 text-white text-center font-extrabold">Sign in</h1>
         {#if form?.error}
             <h2 class=" animate-appear capitalize text-white font-bold text-lg">{form.error}</h2>
         {/if}
-        <div class="mb-20 mt-10 text-xl">
+        <div class="mb-20 mt-10 text-xl mx-20 md:mx-0">
             <p class=" text-white font-bold">Username</p>
             <input name="user" id="user" class="bg-red-500 outline-none text-white placeholder:text-white placeholder:opacity-40" type="text" placeholder="E-mail"/>
         </div>
