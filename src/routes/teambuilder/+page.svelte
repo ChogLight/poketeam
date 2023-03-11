@@ -7,8 +7,9 @@
     import MediaQuery from "../../components/MediaQuery.svelte";
     let card = false
     export let data
-    let myTeams = data.team
-    let promise = Promise.resolve({message:"Select a team"})
+    const { teams } = data
+    const { user } = data
+    let promise = Promise.resolve({message:`Select a team`})
     let moveFetched = Promise.resolve({message: "Select a move"})
     let selectedPokemon
     let teamName
@@ -144,16 +145,13 @@
                                 <button on:click={() => {card = true; selectedPokemon = pokemon;}} 
                                 class="animate-appear relative transform rounded-lg
                                      bg-white text-left shadow-xl transition-all md:my-2 my-auto md:w-full md:max-w-lg">
-                                <div class="flex flex-col bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <div class="flex flex-col bg-white mx-1">
                                     <div class="w-1/3">
-                                        <p class="font-bold mb-3 text-lg capitalize text-red-500">
+                                        <p class="font-bold mb-3 text-sm capitalize text-red-500">
                                                 {pokemon.name}
                                         </p> 
                                     </div>
                                     <div class="w-2/3 font-bold text-red-600 text-xs">
-                                        <p class="font-bold text-red-600 text-lg">
-                                            N.°{pokemon.id}
-                                        </p>
                                         <img class = "object-contain h-70 w-70"
                                             src = {pokemon.sprites.other['official-artwork'].front_default} alt = "">
                                     </div>
@@ -169,10 +167,13 @@
             <div class="flex justify-center items-center flex-1 text-xs opacity-50">{pokemonTeam.message}</div>
         {/if}
     {/await}
-    
+    {#await teams}
+        <h1>Loading</h1>
+    {:then teams} 
     <div class="md:basis-1/5 p-5 overflow-y-scroll border border-black bg-red-400" dir="rtl">
+        <h1>{user.user}'s Teams</h1>
         <ul class="rounded-lg" dir="ltr">
-            {#each myTeams as team}
+            {#each teams as team}
                 <li><button on:click={() => {getTeam(team); teamName = team.team_name; teamID = team._id}} class="gap-2 text-left w-5/6 bg-red-500 p-2 m-1 text-xl font-bold 
                       text-white drop-shadow-lg active:drop-shadow-sm shadow-black rounded-r-full">
                       <div class="flex">
@@ -186,6 +187,7 @@
             {/each}
         </ul>
       </div>
+    {/await}
 </div>
 {#if visible}
 <div class="relative z-10" role="dialog" >

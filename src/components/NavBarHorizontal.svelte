@@ -5,6 +5,7 @@
     export let animation
     export let width
     export let height
+    export let user
 </script>
 <nav class="flex justify-between {navBarSize} w-screen bg-red-500 items-center text-white duration-300 ">
 
@@ -15,7 +16,11 @@
         <a class="basis-1/3" href="/teambuilder"><i class="fa-solid fa-hammer"></i></a>
     </div> 
     <div class="flex items-center gap-x-5 mr-4">
-        <a class="hover:text-yellow-400 duration-100" href="/login"> <i class="fa-solid fa-right-to-bracket"></i></a>
+        {#if !user}
+            <a class="hover:text-yellow-400 duration-100" href="/login"> <i class="fa-solid fa-right-to-bracket"></i></a>
+        {:else}
+            <form action="/teambuilder?/logout" method="POST"><button><i class="fa-solid fa-power-off"></i></button></form>
+        {/if}
     </div>
 
 </nav>

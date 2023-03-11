@@ -5,6 +5,7 @@
     export let width
     export let height
     export let animation
+    export let user
     let today = new Date();
 </script>
 
@@ -27,9 +28,17 @@
     
     <div class="basis-1/3 flex items-center text-sm gap-14">
         {#if navBarSize == "basis-1/6"}
-            <a class="hover:text-yellow-400 duration-100" href="/login">Log in</a>
+            {#if !user}
+                <a class="hover:text-yellow-400 duration-100" href="/login">Log in</a>
+            {:else}
+            <form action="/teambuilder?/logout" method="POST"><button class="hover:text-yellow-400 duration-100">Log out</button></form>
+            {/if}
         {:else if navBarSize == "basis-1/12"}
-            <i class="fa-solid fa-right-to-bracket"></i>
+            {#if !user}
+                <i class="fa-solid fa-right-to-bracket"></i>
+            {:else}
+                <i class="fa-solid fa-power-off"></i>
+            {/if}
         {/if}
         
     </div>

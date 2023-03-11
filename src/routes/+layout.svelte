@@ -5,13 +5,14 @@
   	import NavBarVertical from '../components/NavBarVertical.svelte';
     import NavBarHorizontal from '../components/NavBarHorizontal.svelte';
     import '../app.css';
-
+    export let data
     let animation
 	let navBarSize
 	let pageSize
     let width
     let height
     let orientation
+    const {user} = data
     const changeIconHoverIn = () => {
         if(window.innerWidth > 500){
             navBarSize = "basis-1/6"
@@ -68,15 +69,15 @@
     <MediaQuery query="(min-width: 1281px)" let:matches>
         {#if matches}
             <div on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} class="{navBarSize} duration-300">
-                <NavBarVertical navBarSize = {navBarSize} width = {width} height = {height} animation = {animation}/>
+                <NavBarVertical user = {user} navBarSize = {navBarSize} width = {width} height = {height} animation = {animation}/>
             </div>
         {/if}
     </MediaQuery>
 
     <MediaQuery query = "(max-width: 428px)" let:matches>
         {#if matches}
-            <div on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} class="{navBarSize} duration-300">
-                <NavBarHorizontal navBarSize={navBarSize} width = {width} height = {height} animation = {animation}/>
+            <div  on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} class="{navBarSize} duration-300">
+                <NavBarHorizontal user = {user} navBarSize={navBarSize} width = {width} height = {height} animation = {animation}/>
             </div>
         {/if}
     </MediaQuery>

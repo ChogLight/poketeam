@@ -7,6 +7,7 @@
     import MediaQuery from "../../components/MediaQuery.svelte";
     import useChart from "../../hooks/UseChart";
     export let data
+    const { user } = data
     let pokemonQuery = ""
     let currentPage = 1
     let card = false
@@ -25,9 +26,10 @@
     }
     //Post function [post team]
     const postTeam = () => {
-      postPromise = fetch('https://pokemonteam-api.onrender.com/poketeam', {
+      postPromise = fetch('/team', {
         method: 'POST',
         body: JSON.stringify({
+          user : user.id,
           team_name: teamName,
           pokemon_1: {
             name: myTeam[0].name, 
@@ -58,19 +60,16 @@
       })
       .then(response => response.json())
       .then(data => {
-        console.log("Result:", data);
-        if(data.message){
-          myTeam.length<6?
-          alert("Your team needs 6 Pokemon!!"):
-          alert("Your team needs a name")
+        if(data.insert.acknowledged){
+          alert("Team created successfully!");
+          myTeam = [];
+          teamName = ""
         }
         else{
-          alert("Team created successfully!");
-        myTeam = [];
-        teamName = ""
+          alert(data.message)
         }
       })
-      .catch(error =>console.log("Error:", error))
+      .catch(error =>{console.log("Error:", error)})
 
       return postPromise
     }
@@ -104,7 +103,7 @@
 <!--Body-->
 <div class="flex md:flex-row flex-col m-auto h-full">
 
-  <!--Used to hide and show team selector on mobile-->
+  {#if user}
   <MediaQuery query = "(max-width: 428px)" let:matches>
     {#if matches}
       <button on:click={() => {teamHidden = !teamHidden}} class=" text-xs rounded-full text-white bg-red-500 mx-40 my-5 px-2">
@@ -116,9 +115,10 @@
       </button>
     {/if}
   </MediaQuery>
-  
+  {/if}
   <!--My team selector (innner pokemon loading)-->
   <div class="md:basis-4/5 p-5 md:flex md:flex-col {teamHidden? "hidden":""}">
+    {#if user}
     <div class="basis-1/12 flex md:flex-row flex-col items-center mx-5 my-2 border-4 justify-between border-black ">
       <div class="flex gap-2 mx-1 my-2">
         <label class="font-bold" for="team_name">Team Name:</label>
@@ -138,21 +138,24 @@
       </div>
         <button class = "border-2 border-black bg-red-500 text-white font-bold rounded-full p-2 m-1" on:click={postTeam}>Save Team</button>
       </div> 
-
+      {/if}
     <!--Pokemon Loading-->
     <MediaQuery query="(min-width: 1281px)" let:matches>
 
       {#if matches}
-        <Pokemon bind:moveFetched bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
+        <Pokemon user = {user} bind:moveFetched bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
       {/if}
 
     </MediaQuery>
   </div>
+
+  <!--Used to hide and show team selector on mobile-->
+  
   <!--Pokemon shown when width is 428px or less-->
   <MediaQuery query = "(max-width: 428px)" let:matches>
 
     {#if matches}
-        <Module option = {"Add"} bind:moveFetched pokemon = {pokemonSearched} capitalizeWord = {capitalizeWord} weakneasses = {pokemonWeakness} bind:card bind:myTeam/>
+        <Module user = {user} option = {"Add"} bind:moveFetched pokemon = {pokemonSearched} capitalizeWord = {capitalizeWord} weakneasses = {pokemonWeakness} bind:card bind:myTeam/>
     {/if}
   </MediaQuery>
   <!--List of Pokemon-->

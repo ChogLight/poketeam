@@ -25,6 +25,7 @@
     export let weakneasses
     export let myTeam
     export let moveFetched
+    export let user
     let page = 1
     const getType = (types) => {
 
@@ -171,12 +172,14 @@
                     </div>
                 </div>
                 <div class="flex justify-end">
-                    <button 
-                    type = "button" 
-                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                    on:click={()=>addToTeam(myTeam, pokemon)}>
-                    Add to my Team
-                    </button>
+                    {#if user}
+                        <button 
+                        type = "button" 
+                        class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
+                        on:click={()=>addToTeam(myTeam, pokemon)}>
+                        Add to my Team
+                        </button>
+                    {/if}
                 </div>
             </div>
             

@@ -17,6 +17,8 @@
 		"@sveltejs/kit": "^1.5.0",
 		"@types/cookie": "^0.5.1",
 		"autoprefixer": "^10.4.13",
+		"bcryptjs": "^2.4.3",
+		"jsonwebtoken": "^9.0.0",
 		"postcss": "^8.4.21",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",

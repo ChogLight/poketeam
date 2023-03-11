@@ -26,7 +26,8 @@
     export let capitalizeWord
     export let moveFetched
     export let option
-    export let deletePokemon
+    export let deletePokemon = 0
+    export let user
     //Fetch move
     const getMove = async (move) => {
         const res = await fetch(move)
@@ -82,7 +83,7 @@
     <div class="fixed inset-0 z-10 overflow-y-auto">
         <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
         
-        <div class="animate-appear relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all md:my-8 my-auto md:w-full md:max-w-lg">
+        <div class="animate-appear relative transform overflow-scroll w-full max-w-lg rounded-lg bg-white text-left shadow-xl transition-all md:my-8 my-auto md:w-full md:max-w-lg">
             <div class="flex justify-between mx-4 my-1">
                 <button on:click={() => page = page - 1} disabled="{page ===1? "disabled": ""}">{"<"}</button>
                 <button on:click={() => page = page + 1} disabled="{page ===4? "disabled": ""}">{">"}</button>
@@ -210,7 +211,7 @@
             
         </div>
             </div>
-            <div class="flex bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 {page==4? "":"hidden"}">
+            <div class="flex bg-white  {page==4? "":"hidden"} justify-center items-center p-3">
                 <Radar data = {
                     {
                         labels:[
@@ -251,20 +252,21 @@
                 } options={{ responsive: true }}/>
             </div>
             <div class="flex justify-between">
-                <button 
-                type = "button" 
-                class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                on:click={()=>{
-                    if(option === "Add"){
-                        addToTeam(myTeam, pokemon)
-                    }
-                    else{
-                        deletePokemon(pokemon.name)
-                    }
-                    }}>
-                {option}
-            </button>
-
+                {#if user}
+                    <button 
+                        type = "button" 
+                        class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
+                        on:click={()=>{
+                            if(option === "Add"){
+                                addToTeam(myTeam, pokemon)
+                            }
+                            else{
+                                deletePokemon(pokemon.name)
+                            }
+                            }}>
+                        {option}
+                    </button>
+                {/if}
             <button 
                 type = "button" 
                 class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
