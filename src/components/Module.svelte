@@ -164,7 +164,7 @@
             </div>
             <div class="flex flex-col basis-11/12 gap-10 p-10 {page==3? "":"hidden"}">
                 <h1 class=" text-red-500 font-bold text-2xl basis-1/5 capitalize">{pokemon.name} moves</h1>
-        <div class="flex text-sm font-bold content-center h-3/5">
+        <div class="flex flex-col md:flex-row md:gap-0 gap-10 text-sm font-bold content-center h-3/5">
             <div class="basis-1/5 overflow-y-scroll">
                 <ul class=" h-44">
                     {#each pokemon.moves as move}

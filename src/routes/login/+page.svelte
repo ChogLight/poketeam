@@ -31,7 +31,7 @@
         {/if}
         <div class="mb-20 mt-10 text-xl mx-20 md:mx-0">
             <p class=" text-white font-bold">Username</p>
-            <input name="user" id="user" class="bg-red-500 outline-none text-white placeholder:text-white placeholder:opacity-40" type="text" placeholder="E-mail"/>
+            <input name="user" id="user" class="bg-red-500 outline-none text-white placeholder:text-white placeholder:opacity-40" type="text" placeholder="Username"/>
         </div>
         
         
