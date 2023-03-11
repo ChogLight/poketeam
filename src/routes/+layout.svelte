@@ -13,6 +13,7 @@
     let height
     let orientation
     const {user} = data
+    console.log(user)
     const changeIconHoverIn = () => {
         if(window.innerWidth > 500){
             navBarSize = "basis-1/6"
