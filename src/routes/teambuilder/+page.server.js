@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { error, redirect } from '@sveltejs/kit';
-import jwt from 'jsonwebtoken'
 /** @type {import('./$types').PageServerLoad} */
 export const load = (event) => {
     const user = event.locals.user
