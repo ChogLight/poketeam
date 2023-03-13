@@ -106,9 +106,9 @@
   {#if user}
   <MediaQuery query = "(max-width: 428px)" let:matches>
     {#if matches}
-      <button on:click={() => {teamHidden = !teamHidden}} class=" text-xs rounded-full text-white bg-red-500 mx-40 my-5 px-2">
+      <button on:click={() => {teamHidden = !teamHidden}} class=" text-xs rounded-full text-white bg-red-500 mx-10 my-5 text-center px-2">
         {#if teamHidden}
-          <p>My team</p>
+          <p>New Team</p>
         {:else}
           <p>Hide</p>
         {/if}
