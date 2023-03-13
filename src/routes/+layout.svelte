@@ -14,7 +14,7 @@
     let orientation
     const {user} = data
     const changeIconHoverIn = () => {
-        if(window.innerWidth > 500){
+        if(window.innerWidth > 428){
             navBarSize = "basis-1/6"
 		    pageSize = 'basis-5/6'
             width = '120px'
@@ -28,7 +28,7 @@
     }
     const changeIconHoverOut = () => {
 
-        if(window.innerWidth > 500){
+        if(window.innerWidth > 428){
             navBarSize = "basis-1/12"
             width = '60px'
             height = '60px'
@@ -45,7 +45,7 @@
     }
 
     onMount(() => {
-        if(window.innerWidth > 500){
+        if(window.innerWidth > 428){
 	        navBarSize = 'basis-1/12'
 	        pageSize = 'basis-11/12'
             width = '60px'
@@ -66,7 +66,7 @@
 
 <div class="app font-mono flex {orientation} h-screen">
 
-    <MediaQuery query="(min-width: 1281px)" let:matches>
+    <MediaQuery query="(min-width: 428px)" let:matches>
         {#if matches}
             <div on:mouseenter={changeIconHoverIn} on:mouseleave={changeIconHoverOut} class="{navBarSize} duration-300">
                 <NavBarVertical user = {user} navBarSize = {navBarSize} width = {width} height = {height} animation = {animation}/>

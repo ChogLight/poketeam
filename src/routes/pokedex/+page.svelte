@@ -140,7 +140,7 @@
       </div> 
       {/if}
     <!--Pokemon Loading-->
-    <MediaQuery query="(min-width: 1281px)" let:matches>
+    <MediaQuery query="(min-width: 428px)" let:matches>
 
       {#if matches}
         <Pokemon user = {user} bind:moveFetched bind:myTeam bind:pokemon = {pokemonSearched} weakneasses = {pokemonWeakness} capitalizeWord = {capitalizeWord}/>
