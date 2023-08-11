@@ -6,6 +6,7 @@ export async function load(event) {
         const res = await event.fetch("https://pokeapi.co/api/v2/pokemon?limit=1008&offset=0")
         const item = await res.json()
         const length = item.count - 271
+        console.log(item)
         console.log(user)
         return{item, length, user}
 }
