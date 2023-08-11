@@ -18,6 +18,7 @@
     const capitalizeWord = (word) => {
       return word.charAt(0).toUpperCase() + word.slice(1)
     }
+    console.log(user)
     const getTeam = async (object) => {
         const{pokemon_1, pokemon_2, pokemon_3, pokemon_4, pokemon_5, pokemon_6} = object
         const objectTeam = [
