@@ -1,6 +1,7 @@
 <script>
 // @ts-nocheck
     import { onMount } from 'svelte'
+    import { readable } from 'svelte/store';
     import MediaQuery from '../components/MediaQuery.svelte';
   	import NavBarVertical from '../components/NavBarVertical.svelte';
     import NavBarHorizontal from '../components/NavBarHorizontal.svelte';
@@ -13,7 +14,6 @@
     let height
     let orientation
     const {user} = data
-    console.log(user)
     const changeIconHoverIn = () => {
         if(window.innerWidth > 428){
             navBarSize = "basis-1/6"
