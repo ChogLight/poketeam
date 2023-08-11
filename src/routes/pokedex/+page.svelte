@@ -204,7 +204,7 @@
     </div>
     </div>
   {/await}
-</div>
+</div>  
 
 
 <style>

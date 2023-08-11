@@ -20,7 +20,7 @@ export const createUser = async (user, password, email) => {
     try {
         
         const newUser = await db.collection('users').insertOne({
-            user: user,
+            user: user.toLowerCase(),
             email:email,
             password: await bcrypt.hash(password, 10)
         })

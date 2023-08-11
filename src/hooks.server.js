@@ -29,6 +29,7 @@ export const handle = async ({ event, resolve }) => {
         catch (error) {
             console.error(error)
         }
+        console.log(event.locals.user)
     }
 
     return await resolve(event)

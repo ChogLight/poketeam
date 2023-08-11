@@ -76,7 +76,7 @@
                     <h1 class="text-red-500 text-4xl mx-10 my-4 font-bold">{teamName}</h1>
                     <button on:click={() => visible = true} class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md">Delete Team</button>
                 </div>
-                <div class="grid grid-cols-3 basis-4/6 gap-2">
+                <div class=" card grid grid-cols-3 basis-4/6 gap-2">
                     {#each pokemonTeam as pokemon}
                         <MediaQuery query="(min-width: 1281px)" let:matches>
                             {#if matches}
@@ -225,4 +225,7 @@
     background: #9b9595;
     border-radius: 10px;
   }
+
+  
   </style>
+

@@ -3,6 +3,7 @@ import db from "$lib/db"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from "$env/static/private"
+import { redirect } from "@sveltejs/kit"
 export const login = async (user, password) => {
     const userCheck = await db.collection('users').findOne({user: user})
     if(!user){
@@ -11,7 +12,10 @@ export const login = async (user, password) => {
         }
 
     }
+    if(!userCheck){
+        redirect(500, '/login')
 
+    }
     const isPasswordValid = await bcrypt.compare(password, userCheck.password)
 
     if(!isPasswordValid){
