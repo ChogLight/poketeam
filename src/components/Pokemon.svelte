@@ -111,7 +111,7 @@
                                     }
                                 ]
                             }
-                        } options={{ responsive: true }}/>
+                        } options={{ responsive: true, plugins: {legend: {display:false}} }}/>
                     </div>
                 </div>
             </div>
