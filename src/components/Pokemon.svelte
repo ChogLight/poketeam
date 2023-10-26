@@ -66,69 +66,12 @@
             <button on:click={() => page = page + 1} disabled="{page ===2? "disabled": ""}">Moves {">"}</button>
         {/if}
     </div>
-    <div class="flex bg-white rounded-md mx-5 my-3 p-5 shadow-lg basis-11/12 gap-10 overflow-y-scroll {page ==1? "":"hidden"}">
+    <div class="flex bg-white rounded-md mx-10 my-3 p-5 shadow-lg basis-11/12 gap-10 overflow-y-scroll {page ==1? "":"hidden"}">
         <div class="flex flex-col basis-1/4">
-            <div>
+            <div class="flex">
                 <h1 class="text-center text-red-500 font-bold text-6xl">{capitalizeWord(pokemon.name)}</h1>
-                <p class="text-red-600 font-bold text-sm">
-                    N.°{pokemon.id}
-                </p>
+                
             </div>
-                <img class="m-2" width = "184" height="184" src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${pokemon.name}_img`}/>
-                <p class="font-bold mb-3 text-gray-700 uppercase">
-                    Type: {''}
-                    <span class="font-normal capitalize">
-                        {getType(pokemon.types)}
-                    </span>
-                
-                </p>
-    
-                <p class="font-bold mb-3 text-gray-700 uppercase">
-                    Size: {''}
-                    <span class="font-normal normal-case">
-                    {`${pokemon.height/10}m`}
-                    </span>
-                
-                </p>
-                <p class="font-bold mb-3 text-gray-700 uppercase">
-                    Weight: {''}
-                    <span class="font-normal normal-case">
-                    {`${pokemon.weight/10}kg`}
-                    </span>
-                
-                </p>
-                <div class="flex">
-                    <p class="font-bold mb-3 text-gray-700 uppercase">
-                        Abilities:
-                    </p>
-                    <ul>
-                        {#each pokemon.abilities as abilities}
-                            <li class="{abilities.is_hidden?"text-red-400":""}">
-                                {capitalizeWord(abilities.ability.name)}
-                            </li>
-                        {/each}
-                    </ul>
-                </div>
-                <table class="table-auto basis 1/2 border border-black text-left my-10">
-                    <thead class="border border-black">
-                        <th class="py-2 px-1 border border-black">Stat name</th>
-                        <th class="py-2 px-1  border border-black">Base stat</th>
-                        <th class="py-2 px-1  border border-black">EV</th>
-                    </thead>
-                    <tbody>
-                        {#each pokemon.stats as stats}
-                            <tr class="odd:bg-white even:bg-red-200 text-sm odd:hover:bg-slate-100 even:hover:bg-red-300">
-                                <td class="border border-black">{capitalizeWord(stats.stat.name)}</td>
-                                <td class="border border-black">{stats.base_stat}</td>
-                                <td class="border border-black">{stats.effort}</td>
-                            </tr>
-                        {/each}
-                    </tbody>
-                </table>
-                
-        </div>
-       
-        <div class="basis-3/4">
             <div class="flex flex-col gap-5">
                 <div class="basis-4/5 flex justify-center my-5">
                     <div class="basis-3/4">
@@ -171,18 +114,75 @@
                         } options={{ responsive: true }}/>
                     </div>
                 </div>
-                <div class="flex justify-end">
-                    {#if user}
-                        <button 
-                        type = "button" 
-                        class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                        on:click={()=>addToTeam(myTeam, pokemon)}>
-                        Add to my Team
-                        </button>
-                    {/if}
-                </div>
             </div>
-            
+                <p class="font-bold mb-3 text-gray-700 uppercase">
+                    Type: {''}
+                    <span class="font-normal capitalize">
+                        {getType(pokemon.types)}
+                    </span>
+                
+                </p>
+    
+                <p class="font-bold mb-3 text-gray-700 uppercase">
+                    Size: {''}
+                    <span class="font-normal normal-case">
+                    {`${pokemon.height/10}m`}
+                    </span>
+                
+                </p>
+                <p class="font-bold mb-3 text-gray-700 uppercase">
+                    Weight: {''}
+                    <span class="font-normal normal-case">
+                    {`${pokemon.weight/10}kg`}
+                    </span>
+                
+                </p>
+                <div class="flex">
+                    <p class="font-bold mb-3 text-gray-700 uppercase">
+                        Abilities:
+                    </p>
+                    <select>
+                        {#each pokemon.abilities as abilities}
+                            <option class="{abilities.is_hidden?"text-red-400":""}">
+                                {capitalizeWord(abilities.ability.name)}
+                            </option>
+                        {/each}
+                    </select>
+                </div>
+                <!-- <table class="table-auto basis 1/2 border border-black text-left my-10">
+                    <thead class="border border-black">
+                        <th class="py-2 px-1 border border-black">Stat name</th>
+                        <th class="py-2 px-1  border border-black">Base stat</th>
+                        <th class="py-2 px-1  border border-black">EV</th>
+                    </thead>
+                    <tbody>
+                        {#each pokemon.stats as stats}
+                            <tr class="odd:bg-white even:bg-red-200 text-sm odd:hover:bg-slate-100 even:hover:bg-red-300">
+                                <td class="border border-black">{capitalizeWord(stats.stat.name)}</td>
+                                <td class="border border-black">{stats.base_stat}</td>
+                                <td class="border border-black">{stats.effort}</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table> -->
+                
+        </div>
+       
+        <div class="basis-3/4 content-center">
+            <p class="text-red-600 font-bold text-xl text-right m-3">
+                N.°{pokemon.id}
+            </p>
+            <img class="mx-auto my-auto" width = "80%" height="500" src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${pokemon.name}_img`}/>  
+            <div class="flex justify-end">
+                {#if user}
+                    <button 
+                    type = "button" 
+                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
+                    on:click={()=>addToTeam(myTeam, pokemon)}>
+                    Add to my Team
+                    </button>
+                {/if}
+            </div>
         </div>
     </div>
     <div class="flex flex-col bg-white rounded-md mx-5 my-3 p-5 shadow-lg basis-11/12 gap-10 {page ==2? "":"hidden"} overflow-y-scroll">
