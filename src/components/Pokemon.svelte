@@ -27,6 +27,7 @@
     export let moveFetched
     export let user
     let page = 1
+    let description = ''
     const getType = (types) => {
 
         if (types[1]) {
@@ -51,13 +52,20 @@
         const res = await fetch(move)
         moveFetched = await res.json()
     }
+
+    const getFlavorText = async (url) => {
+        const res = await fetch(url)
+        const flavorText = await res.json()
+        description = flavorText
+    }
+    console.log(pokemon)
 </script>
 
 {#await pokemon}
     <div class="mx-auto">
         <Pokeball height ="120px" width = "120px" animation= "animate-spin"/>
     </div>
-{:then pokemon } 
+{:then pokemon}
 {#if !pokemon.message}
     <div class="flex {page==2? "justify-start":"justify-end"} mx-4 my-1">
         {#if page ==2}
@@ -66,56 +74,11 @@
             <button on:click={() => page = page + 1} disabled="{page ===2? "disabled": ""}">Moves {">"}</button>
         {/if}
     </div>
-    <div class="flex bg-white rounded-md mx-10 my-3 p-5 shadow-lg basis-11/12 gap-10 overflow-y-scroll {page ==1? "":"hidden"}">
-        <div class="flex flex-col basis-1/4">
-            <div class="flex">
-                <h1 class="text-center text-red-500 font-bold text-6xl">{capitalizeWord(pokemon.name)}</h1>
-                
-            </div>
-            <div class="flex flex-col gap-5">
-                <div class="basis-4/5 flex justify-center my-5">
-                    <div class="basis-3/4">
-                        <Radar data = {
-                            {
-                                labels:[
-                                    'Normal',
-                                    'Fire',
-                                    'Water',
-                                    'Electric',
-                                    'Grass',
-                                    'Ice',
-                                    'Fighting',
-                                    'Poison',
-                                    'Ground',
-                                    'Flying',
-                                    'Psychic',
-                                    'Bug',
-                                    'Rock',
-                                    'Ghost',
-                                    'Dragon',
-                                    'Dark',
-                                    'Steel',
-                                    'Fairy'
-                                ],
-                                datasets:[
-                                    {
-                                        label: `${capitalizeWord(pokemon.name)} Weaknesses`,
-                                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                                        borderColor: 'rgb(255, 99, 132)',
-                                        pointBackgroundColor: 'rgb(255, 99, 132)',
-                                        pointBorderColor: '#fff',
-                                        pointHoverBackgroundColor: '#fff',
-                                        pointHoverBorderColor: 'rgb(255, 99, 132)',
-                                        data: weakneasses(pokemon)
-
-                                    }
-                                ]
-                            }
-                        } options={{ responsive: true, plugins: {legend: {display:false}} }}/>
-                    </div>
-                </div>
-            </div>
-                <p class="font-bold mb-3 text-gray-700 uppercase">
+    <div class="font-[khand] flex flex-col bg-white rounded-[40px] mx-10 my-3 p-12 basis-11/12 gap-10 overflow-y-scroll {page ==1? "":"hidden"} border-black border-4">
+        <div class="flex basis-4/12 justify-between">
+                <h1 class="text-center text-[#1E1E1E] font-bold text-8xl">{capitalizeWord(pokemon.name)}</h1>
+                <h1 class="text-[#DD4D4D] font-bold text-8xl text-right m-3">#{pokemon.id}</h1>
+                <!-- <p class="font-bold mb-3 text-gray-700 uppercase">
                     Type: {''}
                     <span class="font-normal capitalize">
                         {getType(pokemon.types)}
@@ -136,19 +99,8 @@
                     {`${pokemon.weight/10}kg`}
                     </span>
                 
-                </p>
-                <div class="flex">
-                    <p class="font-bold mb-3 text-gray-700 uppercase">
-                        Abilities:
-                    </p>
-                    <select>
-                        {#each pokemon.abilities as abilities}
-                            <option class="{abilities.is_hidden?"text-red-400":""}">
-                                {capitalizeWord(abilities.ability.name)}
-                            </option>
-                        {/each}
-                    </select>
-                </div>
+                </p> -->
+                
                 <!-- <table class="table-auto basis 1/2 border border-black text-left my-10">
                     <thead class="border border-black">
                         <th class="py-2 px-1 border border-black">Stat name</th>
@@ -167,75 +119,16 @@
                 </table> -->
                 
         </div>
+        <div class="flex basis-6/12 justify-between">
+            <img class="m-auto basis-2/4" width = "80%"  src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${pokemon.name}_img`}/>
+        </div>
+        <div class="flex basis 2/12 justify-between">
+
+        </div>
+
        
-        <div class="basis-3/4 content-center">
-            <p class="text-red-600 font-bold text-xl text-right m-3">
-                N.°{pokemon.id}
-            </p>
-            <img class="mx-auto my-auto" width = "80%" height="500" src={pokemon.sprites.other['official-artwork'].front_default} alt = {`${pokemon.name}_img`}/>  
-            <div class="flex justify-end">
-                {#if user}
-                    <button 
-                    type = "button" 
-                    class="px-3 py-2 bg-red-500 m-5 text-white text-sm font-bold rounded-md"
-                    on:click={()=>addToTeam(myTeam, pokemon)}>
-                    Add to my Team
-                    </button>
-                {/if}
-            </div>
-        </div>
+
     </div>
-    <div class="flex flex-col bg-white rounded-md mx-5 my-3 p-5 shadow-lg basis-11/12 gap-10 {page ==2? "":"hidden"} overflow-y-scroll">
-        <h1 class=" text-red-500 font-bold text-6xl basis-1/5 capitalize">{pokemon.name} moves</h1>
-        <div class="flex text-sm font-bold content-center h-3/5 gap-20">
-            <div class="basis-1/5 overflow-y-scroll">
-                <ul class="">
-                    {#each pokemon.moves as move}
-                        <li class="even:bg-red-200 odd:bg-slate-50"><button class="capitalize" on:click={() => {getMove(move.move.url)}} >{move.move.name}</button></li>
-                        
-                    {/each}
-                </ul>
-            </div>
-            <div class="basis-4/5">
-                {#await moveFetched}
-                    <h1>...Loading</h1>
-                {:then moveFetched } 
-                    {#if moveFetched.message}
-                        <div class="flex justify-center items-center flex-1 text-xs opacity-50 h-full ">
-                            {moveFetched.message}
-                        </div>
-                    {:else}
-                        <div class="flex flex-col gap-5 border-black border p-5">
-                            <div class="flex gap-10">
-                                <h1 class="text-4xl text-red-500 font-bold capitalize">{moveFetched.name}</h1>
-                            </div>
-                            <p>{moveFetched.flavor_text_entries.length > 0?
-                                    moveFetched.flavor_text_entries.find(text => text.language.name == 'en').flavor_text:""}</p>
-                            <div class="flex gap-5">
-                                <h2 class="text-xl text-red-500 font-bold">Type:</h2>
-                                <p class="text-lg capitalize align-bottom">{moveFetched.type.name}</p>
-                            </div>
-                            <div class="flex gap-5">
-                                <h2 class="text-xl text-red-500 font-bold">Power:</h2>
-                                <p class="text-lg capitalize align-bottom">{moveFetched.power}</p>
-                            </div>
-                            <div class="flex gap-5">
-                                <h2 class="text-xl text-red-500 font-bold">Damage class:</h2>
-                                <p class="text-lg capitalize align-bottom">{moveFetched.damage_class.name}</p>
-                            </div>
-                            <div class="flex gap-5">
-                                <h2 class="text-xl text-red-500 font-bold">Accuracy:</h2>
-                                <p class="text-lg capitalize align-bottom">{moveFetched.accuracy}</p>
-                            </div>
-                        </div>
-                    {/if}
-                {/await}
-            </div>
-            
-        </div>
-        
-    </div>
-    
     {:else}
     <div class="basis-11/12 flex items-center justify-center">
         <h1 class="opacity-50 text-xs">{pokemon.message}</h1>
